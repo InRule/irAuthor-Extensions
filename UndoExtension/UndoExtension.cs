@@ -66,43 +66,49 @@ namespace UndoExtension
                 if (bufferCollection.Count >= BUFFER_SIZE)
                 {
                     var p = bufferCollection.Pop();
-                    Debug.WriteLine("UNDOSTREAM - Buffer at max capacity. Popped {0} from stack", p.DefToUndo.Name);
+                    LogEvent("Buffer at max capacity. Popped {0} from stack", p.DefToUndo.Name);
                 }
                 bufferCollection.Push(x);
             }));
 
             subscriptionsDisposable.Add(
-                UndoClicked.Where(x => bufferCollection.Any())
+                UndoClicked.Do(x => LogEvent("Undo clicked. Current buffer size: {0}", bufferCollection.Count))
+                .Where(x => bufferCollection.Any())
                 .Subscribe(x => UndoDefRemoved(bufferCollection.Pop())));
         }
 
-        private void LogEvent(UndoHistoryItem x)
+        private void LogEvent(UndoHistoryItem undoItem)
         {
-            Debug.WriteLine("UNDOSTREAM - Buffer Count: {3} Name:{0} - DefIndex: {1} Parent: {2}", x.DefToUndo.Name, x.OriginalIndex, x.ParentGuid, bufferCollection.Count);
+            if (undoItem != null)
+            {
+                LogEvent(string.Format("UNDOSTREAM - Buffer Count: {3} Name: {0} - DefIndex: {1} Parent: {2}", undoItem.DefToUndo.Name, undoItem.OriginalIndex, undoItem.ParentGuid, bufferCollection.Count));
+            }
+        }
+
+        private void LogEvent(string message, params object[] values)
+        {
+            Debug.WriteLine("UNDOSTREAM - {0}", string.Format(message, values));
         }
 
         private void UndoDefRemoved(UndoHistoryItem item)
         {
             var def = item.DefToUndo;
 
-            Debug.WriteLine("Parent GUID: {0}", item.ParentGuid);
-            Debug.WriteLine("undo delete of def: {0}", new object[] { def.Name });
-
             var ruleApp = RuleApplicationService.RuleApplicationDef;
             if (ruleApp.LookupItem(def.Guid) != null)
             {
-                Debug.WriteLine("UNDOSTREAM - DefToUndo {0} already exists in rule application def. Cannot undo a deletion when the target element is already present");
+                LogEvent("{0} already exists in rule application def. Cannot undo a deletion when the target element is already present", def.Name);
                 return;
             }
 
             var parent = ruleApp.LookupItem(item.ParentGuid) ?? RuleApplicationService.RuleApplicationDef;
 
-            Debug.WriteLine("lookup of parent: {0}", new object[] { parent.Name });
+            LogEvent(item);
 
             RuleApplicationService.Controller.InsertDef(def, parent, item.OriginalIndex);
             SelectionManager.SelectedItem = def;
 
-            Debug.WriteLine("Added Def {0} to parent {1} elements collection", def.Name, parent.Name);
+            LogEvent("Added Def {0} to parent {1} at position {2}", def.Name, parent.Name, item.OriginalIndex);
 
         }
 
