@@ -88,7 +88,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Arrows-redoicon.png" />
-    <Resource Include="Images\Arrows-Undo-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arrow-undo-16.png" />
+    <Resource Include="Images\arrow-undo-32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

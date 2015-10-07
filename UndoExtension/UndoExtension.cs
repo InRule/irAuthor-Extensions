@@ -23,16 +23,17 @@ namespace UndoExtension
     {
         private VisualDelegateCommand undoCommand;
         private const int BUFFER_SIZE = 10;
+
         protected IObservable<RuleRepositoryDefBase> DefActions;
         private IObservable<Unit> UndoClicked => undoSubject.AsObservable();
+
         private readonly Subject<Unit> undoSubject = new Subject<Unit>();
         protected IObserver<Unit> UndoButtonSubject => undoSubject.AsObserver();
 
-        protected readonly ISubject<UndoHistoryItem> UndoStack = new ReplaySubject<UndoHistoryItem>(BUFFER_SIZE);
         private readonly CompositeDisposable subscriptionsDisposable = new CompositeDisposable();
 
-        private Stack<UndoHistoryItem> bufferCollection = new Stack<UndoHistoryItem>();
-         
+        private readonly Stack<UndoHistoryItem> bufferCollection = new Stack<UndoHistoryItem>(BUFFER_SIZE);
+
         public UndoExtension()
             : base("UndoExtension", "Provides undo functionality on defs", new Guid("{CA41B187-3B1F-48A2-94A2-AAAAF047D453}"))
         {
@@ -42,50 +43,42 @@ namespace UndoExtension
         public override void Enable()
         {
             undoCommand = new VisualDelegateCommand(Undo, "Undo",
-                ImageFactory.GetImageThisAssembly("Images/arrows-undo-icon.png"),
-                ImageFactory.GetImageThisAssembly("Images/arrows-undo-icon.png"));
+                ImageFactory.GetImageThisAssembly("Images/arrow-undo-16.png"),
+                ImageFactory.GetImageThisAssembly("Images/arrow-undo-32.png"));
 
             var group = IrAuthorShell.HomeTab.GetGroup("Clipboard");
             group.AddButton(undoCommand);
+
             var defChangedObservable = Observable.FromEventPattern<CancelEventArgs<RuleRepositoryDefBase>>(
                 x => RuleApplicationService.Controller.RemovingDef += x,
                 x => RuleApplicationService.Controller.RemovingDef -= x);
 
             DefActions = defChangedObservable.Select(x => x.EventArgs.Item);
-            subscriptionsDisposable.Add(DefActions.Select(x => new UndoHistoryItem()
-            {
-                DefToUndo = x.CopyWithSameGuids(),
-                ParentGuid = x.Parent.Guid,
-                OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x)
-            }).Subscribe(x =>
+            subscriptionsDisposable.Add(
+                DefActions.Select(x => new UndoHistoryItem()
+                {
+                    DefToUndo = x.CopyWithSameGuids(),
+                    ParentGuid = x.Parent.Guid,
+                    OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x)
+                }).Do(LogEvent)
+            .Subscribe(x =>
             {
                 if (bufferCollection.Count >= BUFFER_SIZE)
                 {
-                    bufferCollection.Pop();
+                    var p = bufferCollection.Pop();
+                    Debug.WriteLine("UNDOSTREAM - Buffer at max capacity. Popped {0} from stack", p.DefToUndo.Name);
                 }
                 bufferCollection.Push(x);
             }));
-            
-            UndoStack.Do(
-                x =>
-                    Debug.WriteLine("UNDOSTREAM - Name {0} - Order {1} - Parent {2}", x.DefToUndo.Name, x.OriginalIndex,
-                        x.ParentGuid));
-            subscriptionsDisposable.Add(UndoClicked.Where(x => bufferCollection.Any()).Subscribe(x =>
-            {
-                UndoDefRemoved(bufferCollection.Pop());
 
-            }));
-
+            subscriptionsDisposable.Add(
+                UndoClicked.Where(x => bufferCollection.Any())
+                .Subscribe(x => UndoDefRemoved(bufferCollection.Pop())));
         }
 
-        private void AddItemToUndoHistory(RuleRepositoryDefBase def)
+        private void LogEvent(UndoHistoryItem x)
         {
-            // old way
-            //var parentId = def.Parent.Guid;
-            //var elementIndex = ((IContainsRuleElements) def.Parent).RuleElements.IndexOf(def);
-            //UndoStack.Push(new UndoHistoryItem { DefToUndo = def.CopyWithSameGuids(), ParentGuid = parentId, OriginalIndex = elementIndex});
-            //Debug.WriteLine("added {0} to the undo stack", new object[] { def.Name });
-            //undoCommand.IsEnabled = UndoStack.Count > 0;
+            Debug.WriteLine("UNDOSTREAM - Buffer Count: {3} Name:{0} - DefIndex: {1} Parent: {2}", x.DefToUndo.Name, x.OriginalIndex, x.ParentGuid, bufferCollection.Count);
         }
 
         private void UndoDefRemoved(UndoHistoryItem item)
@@ -96,17 +89,18 @@ namespace UndoExtension
             Debug.WriteLine("undo delete of def: {0}", new object[] { def.Name });
 
             var ruleApp = RuleApplicationService.RuleApplicationDef;
-            var parent = ruleApp.LookupItem(item.ParentGuid);
+            if (ruleApp.LookupItem(def.Guid) != null)
+            {
+                Debug.WriteLine("UNDOSTREAM - DefToUndo {0} already exists in rule application def. Cannot undo a deletion when the target element is already present");
+                return;
+            }
 
-            if (parent == null) return;
+            var parent = ruleApp.LookupItem(item.ParentGuid) ?? RuleApplicationService.RuleApplicationDef;
 
             Debug.WriteLine("lookup of parent: {0}", new object[] { parent.Name });
 
-            //parent.RuleElements.Insert(item.OriginalIndex, def);
-            IrAuthorShell.ContentControl.InvalidateVisual();
             RuleApplicationService.Controller.InsertDef(def, parent, item.OriginalIndex);
             SelectionManager.SelectedItem = def;
-            
 
             Debug.WriteLine("Added Def {0} to parent {1} elements collection", def.Name, parent.Name);
 
