@@ -21,14 +21,18 @@ namespace UndoExtension
 {
     public class UndoExtension : ExtensionBase
     {
-        private VisualDelegateCommand undoCommand;
-        private const int BUFFER_SIZE = 10;
-
         protected IObservable<RuleRepositoryDefBase> DefActions;
+        protected IObserver<Unit> UndoButtonSubject => undoSubject.AsObserver();
+
+        private VisualDelegateCommand undoCommand;
+
+        private const int BUFFER_SIZE = 3;
+
         private IObservable<Unit> UndoClicked => undoSubject.AsObservable();
 
         private readonly Subject<Unit> undoSubject = new Subject<Unit>();
-        protected IObserver<Unit> UndoButtonSubject => undoSubject.AsObserver();
+        private readonly Subject<UndoHistoryItem> undoStackChanged = new Subject<UndoHistoryItem>();
+        private readonly Subject<UndoHistoryItem> deletionUndone = new Subject<UndoHistoryItem>();
 
         private readonly CompositeDisposable subscriptionsDisposable = new CompositeDisposable();
 
@@ -44,8 +48,8 @@ namespace UndoExtension
         {
             undoCommand = new VisualDelegateCommand(Undo, "Undo",
                 ImageFactory.GetImageThisAssembly("Images/arrow-undo-16.png"),
-                ImageFactory.GetImageThisAssembly("Images/arrow-undo-32.png"));
-
+                ImageFactory.GetImageThisAssembly("Images/arrow-undo-32.png"),
+                false);
 
             var group = IrAuthorShell.HomeTab.GetGroup("Clipboard");
             group.AddButton(undoCommand);
@@ -57,26 +61,41 @@ namespace UndoExtension
             DefActions = defChangedObservable.Select(x => x.EventArgs.Item);
 
             var undoStream = DefActions.Select(x =>
-            new UndoHistoryItem()
-            {
-                DefToUndo = x.CopyWithSameGuids(),
-                ParentGuid = x.Parent.Guid,
-                OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x)
-            });
+                new UndoHistoryItem
+                {
+                    DefToUndo = x.CopyWithSameGuids(),
+                    ParentGuid = x.Parent.Guid,
+                    OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x)
+                });
+
             undoStream.Do(LogEvent);
+
             subscriptionsDisposable.Add(
                 undoStream
+                    .Subscribe(undoStackChanged)
+                );
+
+            var bufferOverLimit = undoStackChanged.Where(x => bufferCollection.Count >= BUFFER_SIZE);
+            subscriptionsDisposable.Add(bufferOverLimit.Subscribe(x => LogEvent("Buffer at max capacity. Popped {0} from stack", x.DefToUndo.Name)));
+
+            var bufferSizeUnderLimit = undoStackChanged.Where(x => bufferCollection.Count < BUFFER_SIZE);
+            subscriptionsDisposable.Add(
+                bufferSizeUnderLimit
                     .Subscribe(x =>
                     {
-                        if (bufferCollection.Count >= BUFFER_SIZE)
-                        {
-                            var p = bufferCollection.Pop();
-                            LogEvent("Buffer at max capacity. Popped {0} from stack", p.DefToUndo.Name);
-                        }
                         bufferCollection.Push(x);
                         LogEvent("Added item to the undo buffer. Current count is {0}", bufferCollection.Count);
                     })
                 );
+
+            subscriptionsDisposable.Add(
+                undoStackChanged.Where(x => bufferCollection.Any()).Do(x => LogEvent("UndoStackChanged - buffer contains items"))
+                .Subscribe(x => undoCommand.IsEnabled = true)
+            );
+            subscriptionsDisposable.Add(
+                deletionUndone.Where(x => !bufferCollection.Any()).Do(x => LogEvent("OnNext: deletionUndone and buffer is empty"))
+                .Subscribe(x => undoCommand.IsEnabled = false)
+            );
 
             subscriptionsDisposable.Add(
                 UndoClicked.Do(x => LogEvent("Undo clicked. Current buffer size: {0}", bufferCollection.Count))
@@ -95,7 +114,8 @@ namespace UndoExtension
 
         private void LogEvent(string message, params object[] values)
         {
-            Debug.WriteLine("UNDOSTREAM - {0}", string.Format(message, values));
+            var formattedMessage = string.Format(message, values);
+            Debug.WriteLine("UNDOSTREAM - {0}", new object[] { formattedMessage });
         }
 
         private void UndoDefRemoved(UndoHistoryItem item)
@@ -117,6 +137,7 @@ namespace UndoExtension
             SelectionManager.SelectedItem = def;
 
             LogEvent("Added Def {0} to parent {1} at position {2}", def.Name, parent.Name, item.OriginalIndex);
+            deletionUndone.OnNext(item);
 
         }
 
