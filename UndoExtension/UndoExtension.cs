@@ -46,6 +46,7 @@ namespace UndoExtension
                 ImageFactory.GetImageThisAssembly("Images/arrow-undo-16.png"),
                 ImageFactory.GetImageThisAssembly("Images/arrow-undo-32.png"));
 
+
             var group = IrAuthorShell.HomeTab.GetGroup("Clipboard");
             group.AddButton(undoCommand);
 
@@ -54,34 +55,41 @@ namespace UndoExtension
                 x => RuleApplicationService.Controller.RemovingDef -= x);
 
             DefActions = defChangedObservable.Select(x => x.EventArgs.Item);
-            subscriptionsDisposable.Add(
-                DefActions.Select(x => new UndoHistoryItem()
-                {
-                    DefToUndo = x.CopyWithSameGuids(),
-                    ParentGuid = x.Parent.Guid,
-                    OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x)
-                }).Do(LogEvent)
-            .Subscribe(x =>
+
+            var undoStream = DefActions.Select(x =>
+            new UndoHistoryItem()
             {
-                if (bufferCollection.Count >= BUFFER_SIZE)
-                {
-                    var p = bufferCollection.Pop();
-                    LogEvent("Buffer at max capacity. Popped {0} from stack", p.DefToUndo.Name);
-                }
-                bufferCollection.Push(x);
-            }));
+                DefToUndo = x.CopyWithSameGuids(),
+                ParentGuid = x.Parent.Guid,
+                OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x)
+            });
+            undoStream.Do(LogEvent);
+            subscriptionsDisposable.Add(
+                undoStream
+                    .Subscribe(x =>
+                    {
+                        if (bufferCollection.Count >= BUFFER_SIZE)
+                        {
+                            var p = bufferCollection.Pop();
+                            LogEvent("Buffer at max capacity. Popped {0} from stack", p.DefToUndo.Name);
+                        }
+                        bufferCollection.Push(x);
+                        LogEvent("Added item to the undo buffer. Current count is {0}", bufferCollection.Count);
+                    })
+                );
 
             subscriptionsDisposable.Add(
                 UndoClicked.Do(x => LogEvent("Undo clicked. Current buffer size: {0}", bufferCollection.Count))
                 .Where(x => bufferCollection.Any())
-                .Subscribe(x => UndoDefRemoved(bufferCollection.Pop())));
+                .Subscribe(x => UndoDefRemoved(bufferCollection.Pop()))
+            );
         }
 
         private void LogEvent(UndoHistoryItem undoItem)
         {
             if (undoItem != null)
             {
-                LogEvent(string.Format("UNDOSTREAM - Buffer Count: {3} Name: {0} - DefIndex: {1} Parent: {2}", undoItem.DefToUndo.Name, undoItem.OriginalIndex, undoItem.ParentGuid, bufferCollection.Count));
+                LogEvent("Buffer Count: {3} Name: {0} - DefIndex: {1} Parent: {2}", undoItem.DefToUndo.Name, undoItem.OriginalIndex, undoItem.ParentGuid, bufferCollection.Count);
             }
         }
 
