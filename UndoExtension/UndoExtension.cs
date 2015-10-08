@@ -27,7 +27,7 @@ namespace UndoExtension
         private IObservable<Unit> UndoClicked => undoSubject.AsObservable();
 
         private readonly Subject<Unit> undoSubject = new Subject<Unit>();
-        private readonly Subject<UndoHistoryItem> undoStackChanged = new Subject<UndoHistoryItem>();
+        private readonly Subject<int> undoStackChanged = new Subject<int>();
         private readonly BehaviorSubject<bool> undoInProgress = new BehaviorSubject<bool>(false);
 
         private readonly CompositeDisposable subscriptionsDisposable = new CompositeDisposable();
@@ -63,22 +63,28 @@ namespace UndoExtension
                 x => RuleApplicationService.Controller.RemovingDef += x,
                 x => RuleApplicationService.Controller.RemovingDef -= x)
                 .Select(x => x.EventArgs.Item)
-                .Select(x => PopulateUndoHistoryItem(x, UndoHistoryItem.OperationType.DefRemoved));
+                .Select(x => PopulateUndoHistoryItem(x, UndoDefRemoved));
 
             var insertStream = Observable.FromEventPattern<EventArgs<RuleRepositoryDefBase>>(
                 x => RuleApplicationService.Controller.DefAdded += x,
                 x => RuleApplicationService.Controller.DefAdded -= x)
                 .Select(x => x.EventArgs.Item)
-                .Select(x => PopulateUndoHistoryItem(x, UndoHistoryItem.OperationType.DefInserted));
+                .Select(x => PopulateUndoHistoryItem(x, UndoDefInserted));
 
             // add operations to the undo stack, as long as there isn't an undo currently in progress
-            var operationStream = deleteStream.Merge(insertStream)
-                .Do(LogEvent)
-                .Zip(undoInProgress.Where(undo => !undo), (item, b) => item);
+            var operationStream = deleteStream.Merge(insertStream).Where(x => !undoInProgress.Value).Do(LogEvent);
             subscriptionsDisposable.Add(operationStream.Subscribe(x => DonutPopStack(x)));
 
-            var undoActionStream = UndoClicked.Zip(undoInProgress.Where(x => !x), (unit, b) => b).Where(x => bufferCollection.Any());
-            subscriptionsDisposable.Add(undoActionStream.Subscribe(x => PerformUndo(bufferCollection.Pop())));
+            var undoActionStream = UndoClicked.Where(x => bufferCollection.Any());
+            subscriptionsDisposable.Add(undoActionStream.Subscribe(x =>
+            {
+                var item = bufferCollection.Pop();
+                undoStackChanged.OnNext(bufferCollection.Count);
+                PerformUndo(item);
+            }, exception => LogEvent(exception.ToString())));
+            subscriptionsDisposable.Add(undoStackChanged.Subscribe(x => undoCommand.IsEnabled = x > 0));
+
+            subscriptionsDisposable.Add(undoInProgress.Subscribe(x => LogEvent("UndoInProgress: {0}", x)));
         }
 
         private void PerformUndo(UndoHistoryItem item)
@@ -102,33 +108,20 @@ namespace UndoExtension
 
             var parent = ruleApp.LookupItem(item.ParentGuid) ?? RuleApplicationService.RuleApplicationDef;
 
-            LogEvent(item);
-
             RuleApplicationService.Controller.InsertDef(def, parent, item.OriginalIndex);
             SelectionManager.SelectedItem = def;
 
             LogEvent("Added Def {0} to parent {1} at position {2}", def.Name, parent.Name, item.OriginalIndex);
         }
 
-        private UndoHistoryItem PopulateUndoHistoryItem(RuleRepositoryDefBase x, UndoHistoryItem.OperationType operation)
+        private UndoHistoryItem PopulateUndoHistoryItem(RuleRepositoryDefBase x, Action<UndoHistoryItem> undoAction)
         {
             return new UndoHistoryItem
             {
                 DefToUndo = x.CopyWithSameGuids(),  
                 ParentGuid = x.Parent.Guid,
                 OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x),
-                Operation = operation,
-                UndoAction = item =>
-                {
-                    if (operation == UndoHistoryItem.OperationType.DefRemoved)
-                    {
-                        UndoDefRemoved(item);
-                    }
-                    else
-                    {
-                        UndoDefInserted(item);
-                    }
-                }
+                UndoAction = undoAction
             };
         }
 
@@ -145,7 +138,7 @@ namespace UndoExtension
                 item = bufferCollection.Pop();
             }
             bufferCollection.Push(itemToAdd);
-            undoStackChanged.OnNext(itemToAdd);
+            undoStackChanged.OnNext(bufferCollection.Count);
             return item;
         }
 
