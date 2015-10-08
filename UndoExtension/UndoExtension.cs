@@ -127,7 +127,17 @@ namespace UndoExtension
 
         private void UndoDefInserted(UndoHistoryItem item)
         {
-            throw new NotImplementedException();
+            var def = item.DefToUndo;
+            var ruleApp = RuleApplicationService.RuleApplicationDef;
+            var lookedUpDef = ruleApp.LookupItem(def.Guid);
+            if (lookedUpDef == null)
+            {
+                LogEvent("{0} does not exist in this RuleAppDef. Nothing to undo.", def.Name);
+                return;
+            }
+            SelectionManager.SelectedItem = lookedUpDef.Parent;
+            RuleApplicationService.Controller.RemoveDef(lookedUpDef);
+            LogEvent("(UndoDefInserted) - Removed Def {0}", def.Name);
         }
 
         private UndoHistoryItem DonutPopStack(UndoHistoryItem itemToAdd, int bufferSize = BUFFER_SIZE)
