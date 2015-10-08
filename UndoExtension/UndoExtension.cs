@@ -19,19 +19,13 @@ namespace UndoExtension
     public class UndoExtension : ExtensionBase
     {
         private IObserver<Unit> UndoButtonSubject => undoSubject.AsObserver();
-
         private VisualDelegateCommand undoCommand;
-
         private const int BUFFER_SIZE = 3;
-
         private IObservable<Unit> UndoClicked => undoSubject.AsObservable();
-
         private readonly Subject<Unit> undoSubject = new Subject<Unit>();
         private readonly Subject<int> undoStackChanged = new Subject<int>();
         private readonly BehaviorSubject<bool> undoInProgress = new BehaviorSubject<bool>(false);
-
         private readonly CompositeDisposable subscriptionsDisposable = new CompositeDisposable();
-
         private readonly Stack<UndoHistoryItem> bufferCollection = new Stack<UndoHistoryItem>(BUFFER_SIZE);
 
         public UndoExtension()
@@ -49,6 +43,9 @@ namespace UndoExtension
             base.Disable();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override void Enable()
         {
             undoCommand = new VisualDelegateCommand(Undo, "Undo",
@@ -107,7 +104,7 @@ namespace UndoExtension
             }
 
             var parent = ruleApp.LookupItem(item.ParentGuid) ?? RuleApplicationService.RuleApplicationDef;
-
+            
             RuleApplicationService.Controller.InsertDef(def, parent, item.OriginalIndex);
             SelectionManager.SelectedItem = def;
 
@@ -174,17 +171,10 @@ namespace UndoExtension
 
     public class UndoHistoryItem
     {
-        public enum OperationType
-        {
-            DefRemoved = 1,
-            DefInserted = 2
-        }
+        
         public Guid ParentGuid { get; set; }
         public int OriginalIndex { get; set; }
         public RuleRepositoryDefBase DefToUndo { get; set; }
-
-        public OperationType Operation { get; set; }
-
         public Action<UndoHistoryItem> UndoAction { get; set; }
     }
 }
