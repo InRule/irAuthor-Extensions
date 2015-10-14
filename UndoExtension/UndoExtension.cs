@@ -79,8 +79,8 @@ namespace UndoExtension
                 undoStackChanged.OnNext(bufferCollection.Count);
                 PerformUndo(item);
             }, exception => LogEvent(exception.ToString())));
-            subscriptionsDisposable.Add(undoStackChanged.Subscribe(x => undoCommand.IsEnabled = x > 0));
 
+            subscriptionsDisposable.Add(undoStackChanged.Subscribe(x => undoCommand.IsEnabled = x > 0));
             subscriptionsDisposable.Add(undoInProgress.Subscribe(x => LogEvent("UndoInProgress: {0}", x)));
         }
 
@@ -113,11 +113,17 @@ namespace UndoExtension
 
         private UndoHistoryItem PopulateUndoHistoryItem(RuleRepositoryDefBase x, Action<UndoHistoryItem> undoAction)
         {
+            var idx = -1;
+            if (x.ParentCollection != null)
+            {
+                idx = x.ParentCollection.IndexOf(x.Guid);
+            }
+
             return new UndoHistoryItem
             {
                 DefToUndo = x.CopyWithSameGuids(),  
                 ParentGuid = x.Parent.Guid,
-                OriginalIndex = ((IContainsRuleElements)x.Parent).RuleElements.IndexOf(x),
+                OriginalIndex = idx,
                 UndoAction = undoAction
             };
         }
@@ -169,8 +175,12 @@ namespace UndoExtension
         }
     }
 
-    public class UndoHistoryItem
+    public class UndoHistoryItem<T> : UndoHistoryItem where T : RuleRepositoryDefBase
     {
+        public T Def => DefToUndo as T;
+    }
+    public class UndoHistoryItem
+    {   
         
         public Guid ParentGuid { get; set; }
         public int OriginalIndex { get; set; }
