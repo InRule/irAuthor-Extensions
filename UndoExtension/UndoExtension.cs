@@ -68,8 +68,10 @@ namespace UndoExtension
                 .Select(x => x.EventArgs.Item)
                 .Select(x => PopulateUndoHistoryItem(x, UndoDefInserted));
 
+
             // add operations to the undo stack, as long as there isn't an undo currently in progress
             var operationStream = deleteStream.Merge(insertStream).Where(x => !undoInProgress.Value).Do(LogEvent);
+            
             subscriptionsDisposable.Add(operationStream.Subscribe(x => DonutPopStack(x)));
 
             var undoActionStream = UndoClicked.Where(x => bufferCollection.Any());
@@ -163,21 +165,16 @@ namespace UndoExtension
             }
         }
 
-        private void LogEvent(string message, params object[] values)
+        private static void LogEvent(string message, params object[] values)
         {
             var formattedMessage = string.Format(message, values);
             Debug.WriteLine("UNDOSTREAM - {0}", new object[] { formattedMessage });
         }
 
-        public void Undo(object obj)
+        private void Undo(object obj)
         {
             UndoButtonSubject.OnNext(Unit.Default);
         }
-    }
-
-    public class UndoHistoryItem<T> : UndoHistoryItem where T : RuleRepositoryDefBase
-    {
-        public T Def => DefToUndo as T;
     }
     public class UndoHistoryItem
     {   
