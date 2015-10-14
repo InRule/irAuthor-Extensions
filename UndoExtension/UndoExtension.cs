@@ -20,13 +20,19 @@ namespace UndoExtension
     {
         private IObserver<Unit> UndoButtonSubject => undoSubject.AsObserver();
         private VisualDelegateCommand undoCommand;
+        private VisualDelegateCommand redoCommand;
+
         private const int BUFFER_SIZE = 3;
         private IObservable<Unit> UndoClicked => undoSubject.AsObservable();
         private readonly Subject<Unit> undoSubject = new Subject<Unit>();
+        private readonly Subject<Unit> redoSubject = new Subject<Unit>();
         private readonly Subject<int> undoStackChanged = new Subject<int>();
+        private readonly Subject<int> redoStackChanged = new Subject<int>();
         private readonly BehaviorSubject<bool> undoInProgress = new BehaviorSubject<bool>(false);
         private readonly CompositeDisposable subscriptionsDisposable = new CompositeDisposable();
-        private readonly Stack<UndoHistoryItem> bufferCollection = new Stack<UndoHistoryItem>(BUFFER_SIZE);
+
+        private readonly Stack<UndoHistoryItem> undoBuffer = new Stack<UndoHistoryItem>(BUFFER_SIZE);
+        private readonly Stack<UndoHistoryItem> redoBuffer = new Stack<UndoHistoryItem>(BUFFER_SIZE);
 
         public UndoExtension()
             : base("UndoExtension", "Provides undo functionality on defs", new Guid("{CA41B187-3B1F-48A2-94A2-AAAAF047D453}"))
@@ -53,8 +59,14 @@ namespace UndoExtension
                 ImageFactory.GetImageThisAssembly("Images/arrow-undo-32.png"),
                 false);
 
+            redoCommand = new VisualDelegateCommand(Redo, "Redo",
+                ImageFactory.GetImageThisAssembly("Images/arrow-redo-16.png"),
+                ImageFactory.GetImageThisAssembly("Images/arrow-redo-32.png"),
+                false);
+
             var group = IrAuthorShell.HomeTab.GetGroup("Clipboard");
             group.AddButton(undoCommand);
+            group.AddButton(redoCommand);
 
             var deleteStream = Observable.FromEventPattern<CancelEventArgs<RuleRepositoryDefBase>>(
                 x => RuleApplicationService.Controller.RemovingDef += x,
@@ -71,19 +83,37 @@ namespace UndoExtension
 
             // add operations to the undo stack, as long as there isn't an undo currently in progress
             var operationStream = deleteStream.Merge(insertStream).Where(x => !undoInProgress.Value).Do(LogEvent);
-            
-            subscriptionsDisposable.Add(operationStream.Subscribe(x => DonutPopStack(x)));
+            var redoStream = deleteStream.Merge(insertStream).Where(x => undoInProgress.Value);
 
-            var undoActionStream = UndoClicked.Where(x => bufferCollection.Any());
+            subscriptionsDisposable.Add(operationStream.Subscribe(x => DonutPopStack(x)));
+            subscriptionsDisposable.Add(redoStream.Subscribe(x => {
+                redoBuffer.Push(x);
+                redoStackChanged.OnNext(redoBuffer.Count);
+            }));
+            subscriptionsDisposable.Add(redoStackChanged.Subscribe(x => redoCommand.IsEnabled = x > 0));
+
+            var undoActionStream = UndoClicked.Where(x => undoBuffer.Any());
             subscriptionsDisposable.Add(undoActionStream.Subscribe(x =>
             {
-                var item = bufferCollection.Pop();
-                undoStackChanged.OnNext(bufferCollection.Count);
+                var item = undoBuffer.Pop();
+                undoStackChanged.OnNext(undoBuffer.Count);
                 PerformUndo(item);
             }, exception => LogEvent(exception.ToString())));
 
+            var redoActionStream = redoSubject.Where(x => redoBuffer.Any());
+            subscriptionsDisposable.Add(redoActionStream.Subscribe(x =>
+            {
+                var item = redoBuffer.Pop();
+                redoStackChanged.OnNext(redoBuffer.Count);
+                PerformUndo(item);
+            }));
             subscriptionsDisposable.Add(undoStackChanged.Subscribe(x => undoCommand.IsEnabled = x > 0));
             subscriptionsDisposable.Add(undoInProgress.Subscribe(x => LogEvent("UndoInProgress: {0}", x)));
+        }
+
+        private void Redo(object obj)
+        {
+            redoSubject.OnNext(Unit.Default);
         }
 
         private void PerformUndo(UndoHistoryItem item)
@@ -148,12 +178,12 @@ namespace UndoExtension
         private UndoHistoryItem DonutPopStack(UndoHistoryItem itemToAdd, int bufferSize = BUFFER_SIZE)
         {
             UndoHistoryItem item = null;
-            if (bufferCollection.Count >= bufferSize)
+            if (undoBuffer.Count >= bufferSize)
             {
-                item = bufferCollection.Pop();
+                item = undoBuffer.Pop();
             }
-            bufferCollection.Push(itemToAdd);
-            undoStackChanged.OnNext(bufferCollection.Count);
+            undoBuffer.Push(itemToAdd);
+            undoStackChanged.OnNext(undoBuffer.Count);
             return item;
         }
 
@@ -161,7 +191,7 @@ namespace UndoExtension
         {
             if (undoItem != null)
             {
-                LogEvent("Buffer Count: {3} Name: {0} - DefIndex: {1} Parent: {2}", undoItem.DefToUndo.Name, undoItem.OriginalIndex, undoItem.ParentGuid, bufferCollection.Count);
+                LogEvent("Buffer Count: {3} Name: {0} - DefIndex: {1} Parent: {2}", undoItem.DefToUndo.Name, undoItem.OriginalIndex, undoItem.ParentGuid, undoBuffer.Count);
             }
         }
 
