@@ -89,9 +89,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Arrows-redoicon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\arrow-undo-16.png" />
     <Resource Include="Images\arrow-undo-32.png" />
   </ItemGroup>
