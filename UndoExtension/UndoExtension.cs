@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
@@ -14,7 +11,6 @@ using InRule.Authoring.Media;
 using InRule.Authoring.Windows;
 using InRule.Common.Utilities;
 using InRule.Repository;
-using InRule.Repository.RuleElements;
 
 namespace UndoExtension
 {
@@ -24,7 +20,7 @@ namespace UndoExtension
         private VisualDelegateCommand undoCommand;
         private VisualDelegateCommand redoCommand;
 
-        private const int BUFFER_SIZE = 5;
+        private const int BufferSize = 5;
         private IObservable<Unit> UndoClicked => undoSubject.AsObservable();
         private readonly Subject<Unit> undoSubject = new Subject<Unit>();
         private readonly Subject<Unit> redoSubject = new Subject<Unit>();
@@ -32,8 +28,8 @@ namespace UndoExtension
         private readonly BehaviorSubject<bool> undoInProgress = new BehaviorSubject<bool>(false);
         private readonly CompositeDisposable subscriptionsDisposable = new CompositeDisposable();
 
-        private readonly ObservableDonutStack<UndoHistoryItem> undoBuffer = new ObservableDonutStack<UndoHistoryItem>(BUFFER_SIZE);
-        private readonly ObservableDonutStack<UndoHistoryItem> redoBuffer = new ObservableDonutStack<UndoHistoryItem>(BUFFER_SIZE);
+        private readonly ObservableDonutStack<UndoHistoryItem> undoBuffer = new ObservableDonutStack<UndoHistoryItem>(BufferSize);
+        private readonly ObservableDonutStack<UndoHistoryItem> redoBuffer = new ObservableDonutStack<UndoHistoryItem>(BufferSize);
 
         public UndoExtension()
             : base("UndoExtension", "Provides undo functionality on defs", new Guid("{CA41B187-3B1F-48A2-94A2-AAAAF047D453}"))
@@ -85,7 +81,7 @@ namespace UndoExtension
             // add operations to the undo stack, as long as there isn't an undo currently in progress
             var operationStream = deleteStream.Merge(insertStream);
             var undoStream = operationStream.Where(x => !undoInProgress.Value).Do(item => LogEvent("UndoStream: {0}", item.DefToUndo.Name));
-            var redoStream = operationStream.Where(x => undoInProgress.Value).Do(item => LogEvent("RedoStream: {0}", item.DefToUndo.Name)); ;
+            var redoStream = operationStream.Where(x => undoInProgress.Value).Do(item => LogEvent("RedoStream: {0}", item.DefToUndo.Name));
 
             subscriptionsDisposable.Add(undoStream.Subscribe(x => undoBuffer.Push(x)));
             subscriptionsDisposable.Add(redoStream.Subscribe(x => redoBuffer.Push(x)));
@@ -182,56 +178,6 @@ namespace UndoExtension
         private void Undo(object obj)
         {
             UndoButtonSubject.OnNext(Unit.Default);
-        }
-    }
-    public class UndoHistoryItem
-    {
-
-        public Guid ParentGuid { get; set; }
-        public int OriginalIndex { get; set; }
-        public RuleRepositoryDefBase DefToUndo { get; set; }
-        public Action<UndoHistoryItem> UndoAction { get; set; }
-    }
-    public class ObservableDonutStack<T> : ObservableCollection<T>
-    {
-        private readonly int desiredBufferSize;
-
-        public ObservableDonutStack(int bufferSize) : base(new List<T>(bufferSize))
-        {
-            desiredBufferSize = bufferSize;
-        }
-        public ObservableDonutStack() : this(10)
-        {
-            
-        } 
-
-        public IObservable<NotifyCollectionChangedEventArgs> CollectionChanges
-        {
-            get
-            {
-                return Observable
-                    .FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                    h => this.CollectionChanged += h,
-                    h => this.CollectionChanged -= h)
-                    .Select(x => x.EventArgs);
-            }
-        }
-        public IObservable<int> ItemCount { get { return CollectionChanges.Select(x => Items.Count); } }
-
-        public void Push(T item)
-        {
-            if (Count >= desiredBufferSize)
-            {
-                Pop();
-            }
-            Insert(0, item);
-        }
-
-        public T Pop()
-        {
-            var item = this.FirstOrDefault();
-            RemoveAt(0);
-            return item;
         }
     }
 }
