@@ -11,7 +11,7 @@
 4. Check the box next to **UndoExtension** to enable it.
 
 ##Usage notes
-Supports Undo of delete and insert of *Defs ONLY. Current buffer size is not end-user configurable at this time but can be changed by modifying the source code
+Adds support for undo/redo of delete and insert operations within irAuthor. If there are actions that can be undone/redone, the appropriate button will enable itself.
 
 ##Version History
 
