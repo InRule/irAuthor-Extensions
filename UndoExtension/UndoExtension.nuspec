@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://roadget.azurewebsites.net/eula.txt</licenseUrl>
+    <projectUrl>http://www.inrule.com/</projectUrl>
+    <iconUrl>http://roadget.azurewebsites.net/inrule32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>v0.0.1 (15-Oct-2015)
+* (modification) default buffer size is now set to 5
+* (new!) Redo functionality added. Whenever you undo an action, it is now possible to Redo that action
+* (improvement) most authoring elements are now supported for undo/redo
+* (fixed) Crash when creating various elements - e.g. Vocabulary template
+* Assembly version properties added. Be careful when comparing to previous release using version numbers in DLL as previous release used default value of 1.0.0.0</releaseNotes>
+    <copyright>Copyright 2015 InRule Technology</copyright>
+    <tags>irauthor extension undo ROAD</tags>
+  </metadata>
+</package>
