@@ -12,8 +12,7 @@ namespace ExtensionManager
     {
         public VisualDelegateCommand ViewGalleryCommand { get; private set; }
 
-        private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
-
+        
         public Extension() 
             : base(name: "Extension Manager for IrAuthor", 
                   description: "Browse, manage, and install extensions from the extension gallery", 

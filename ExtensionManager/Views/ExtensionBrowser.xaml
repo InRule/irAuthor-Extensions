@@ -1,0 +1,24 @@
+﻿<Window x:Class="ExtensionManager.Views.ExtensionBrowser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:ExtensionManager.Views"
+        xmlns:viewModels="clr-namespace:ExtensionManager.ViewModels"
+        mc:Ignorable="d" 
+        ShowInTaskbar="False"
+        d:DesignHeight="300" d:DesignWidth="957.394" d:DataContext="{d:DesignInstance Type=viewModels:ExtensionBrowserViewModel, IsDesignTimeCreatable=True}"
+        Title="Extension Browser" 
+        Topmost="True" 
+        WindowStyle="ToolWindow">
+    <StackPanel>
+        <Button x:Name="refreshButton" Content="Refresh" Click="refreshButton_Click"/>
+        <DataGrid x:Name="ExtensionGrid" MinHeight="150" ItemsSource="{Binding Extensions}" FontSize="9" CanUserDeleteRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id, Mode=OneWay}" Header="Name"/>
+                <DataGridTextColumn Binding="{Binding Published.Date, Mode=OneWay}" Header="Publish Date"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </StackPanel>
+</Window>
