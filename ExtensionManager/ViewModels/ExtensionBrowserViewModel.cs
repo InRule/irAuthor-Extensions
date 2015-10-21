@@ -50,6 +50,7 @@ namespace ExtensionManager.ViewModels
         public void RefreshPackageList()
         {
             var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList();
+            Extensions.Clear();
             Extensions.AddRange(packages);
         }
 
@@ -91,7 +92,8 @@ namespace ExtensionManager.ViewModels
         }
         public bool CanExecute(object parameter)
         {
-            return repository.Exists(parameter as string);
+            var s = parameter as string;
+            return s != null && repository.Exists(s);
         }
 
         public void Execute(object parameter)
