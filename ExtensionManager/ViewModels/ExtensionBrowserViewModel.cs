@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using ExtensionManager.Views;
 
 namespace ExtensionManager.ViewModels
 {
@@ -9,8 +12,10 @@ namespace ExtensionManager.ViewModels
 
     public class ExtensionBrowserViewModel : IDisposable
     {
+        public ExtensionBrowser ExtensionBrowserView { private get; set; }
         public ObservableCollection<IPackage> Extensions { get; private set; }
         public ICommand AddExtensionCommand { get; private set; }
+        public ICommand RemoveExtensionCommand { get; private set; }
 
         private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
         private const string ExtensionsDirectory = @"C:\Program Files (x86)\InRule\IrAuthor\Extensions\Extension Manager";
@@ -19,25 +24,57 @@ namespace ExtensionManager.ViewModels
 
         public ExtensionBrowserViewModel()
         {
+            Extensions = new ObservableCollection<IPackage>();
             repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
-            var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList();
-            Extensions = new ObservableCollection<IPackage>(packages);
+            RefreshPackageList();
 
-            AddExtensionCommand = new AddExtensionCommand(RoadGetFeedUrl, ExtensionsDirectory, repository);
+            var addExt = new AddExtensionCommand(ExtensionsDirectory, repository);
+            addExt.CommandComplete +=AddExtOnCommandComplete;
+                   
+            AddExtensionCommand = addExt;
+            RemoveExtensionCommand = new RemoveExtensionCommand();
+
         }
 
-        private void AddExtensionCommandOnCanExecuteChanged(object sender, EventArgs eventArgs)
+        private void AddExtOnCommandComplete(object sender, EventArgs eventArgs)
         {
-            throw new NotImplementedException();
+            var result = MessageBox.Show(ExtensionBrowserView,
+                       "Extension installed. IrAuthor must be restarted before you can use your new extension. Would you like to close IrAuthor now?",
+                       "Restart needed", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        public void RefreshPackageList()
+        {
+            var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList();
+            Extensions.AddRange(packages);
         }
 
         public void Dispose()
         {
-            //if (AddExtensionCommand != null)
-            //{
-            //    AddExtensionCommand.CanExecuteChanged -= AddExtensionCommandOnCanExecuteChanged;
-            //}
+            if (AddExtensionCommand != null && AddExtensionCommand is AddExtensionCommand)
+            {
+                ((AddExtensionCommand)AddExtensionCommand).CommandComplete -= AddExtOnCommandComplete;
+            }
         }
+    }
+
+    class RemoveExtensionCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 
     class AddExtensionCommand : ICommand
@@ -45,7 +82,7 @@ namespace ExtensionManager.ViewModels
         private readonly IPackageRepository repository;
         
         private readonly string installPath;
-        public AddExtensionCommand(string feedUrl, string extensionPath, IPackageRepository repos)
+        public AddExtensionCommand(string extensionPath, IPackageRepository repos)
         {
             repository = repos;
             installPath = extensionPath;
@@ -53,7 +90,7 @@ namespace ExtensionManager.ViewModels
         }
         public bool CanExecute(object parameter)
         {
-            return true;
+            return repository.Exists(parameter as string);
         }
 
         public void Execute(object parameter)
@@ -63,11 +100,13 @@ namespace ExtensionManager.ViewModels
             {
                 return;
             }
-            var packageManager = new PackageManager(repository, installPath);
+            var packageManager = new PackageManager(repository, Path.Combine(installPath, packageId));
             packageManager.InstallPackage(packageId);
 
+            CommandComplete?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler CanExecuteChanged;
+        public event EventHandler CommandComplete;
     }
 }

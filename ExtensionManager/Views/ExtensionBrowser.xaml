@@ -13,7 +13,7 @@
         WindowStyle="ToolWindow">
     <StackPanel>
         <Button x:Name="refreshButton" Content="Refresh" Click="refreshButton_Click"/>
-        <DataGrid x:Name="ExtensionGrid" MinHeight="150" ItemsSource="{Binding Extensions}" FontSize="9" CanUserDeleteRows="False" AutoGenerateColumns="False">
+        <DataGrid x:Name="ExtensionGrid" MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn CanUserReorder="False" CanUserResize="False" >
                     <DataGridTemplateColumn.CellTemplate>

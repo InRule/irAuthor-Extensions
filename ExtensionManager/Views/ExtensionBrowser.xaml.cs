@@ -26,6 +26,7 @@ namespace ExtensionManager.Views
         public ExtensionBrowser()
         {
             viewModel = new ExtensionBrowserViewModel();
+            viewModel.ExtensionBrowserView = this;
             DataContext = viewModel;
 
             InitializeComponent();
@@ -33,7 +34,7 @@ namespace ExtensionManager.Views
 
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-
+            viewModel.RefreshPackageList();
         }
     }
 }
