@@ -55,9 +55,10 @@ namespace ExtensionManager.ViewModels
 
         public void Dispose()
         {
-            if (AddExtensionCommand != null && AddExtensionCommand is AddExtensionCommand)
+            var command = AddExtensionCommand as AddExtensionCommand;
+            if (command != null)
             {
-                ((AddExtensionCommand)AddExtensionCommand).CommandComplete -= AddExtOnCommandComplete;
+                command.CommandComplete -= AddExtOnCommandComplete;
             }
         }
     }
