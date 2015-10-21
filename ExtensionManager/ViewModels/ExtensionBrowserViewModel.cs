@@ -13,7 +13,7 @@ namespace ExtensionManager.ViewModels
         public ICommand AddExtensionCommand { get; private set; }
 
         private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
-        private const string ExtensionsDirectory = @"C:\Program Files (x86)\InRule\IrAuthor\Extensions";
+        private const string ExtensionsDirectory = @"C:\Program Files (x86)\InRule\IrAuthor\Extensions\Extension Manager";
 
         private readonly IPackageRepository repository;
 
@@ -42,13 +42,12 @@ namespace ExtensionManager.ViewModels
 
     class AddExtensionCommand : ICommand
     {
-        private IPackageRepository repository;
-        private string reposUrl;
-        private string installPath;
+        private readonly IPackageRepository repository;
+        
+        private readonly string installPath;
         public AddExtensionCommand(string feedUrl, string extensionPath, IPackageRepository repos)
         {
             repository = repos;
-            reposUrl = feedUrl;
             installPath = extensionPath;
 
         }
