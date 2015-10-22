@@ -37,18 +37,13 @@ namespace ExtensionManager
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
             group.AddButton(ViewGalleryCommand);
-
-            if (!File.Exists(Constants.PackageListFileName))
-            {
-                File.WriteAllLines(Constants.PackageListFileName, new string[0]);
-            }
-
-
         }
 
         private void ViewGallery(object obj)
         {
-            var viewModel = new ExtensionBrowserViewModel();
+            var settings = SettingsStorageService.LoadSettings<ExtensionManagerSettings>(new Guid(Constants.SettingsKey), true);
+            
+            var viewModel = new ExtensionBrowserViewModel(settings);
             var window = new ExtensionBrowser(viewModel)
             {
                 Owner = Application.Current.MainWindow
