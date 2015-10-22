@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ExtensionManager.ViewModels;
 using ExtensionManager.Views;
 using InRule.Authoring.Commanding;
 using InRule.Authoring.Extensions;
@@ -41,8 +42,11 @@ namespace ExtensionManager
 
         private void ViewGallery(object obj)
         {
-            var window = new ExtensionBrowser();
-            window.Owner = Application.Current.MainWindow;
+            var viewModel = new ExtensionBrowserViewModel();
+            var window = new ExtensionBrowser(viewModel)
+            {
+                Owner = Application.Current.MainWindow
+            };
             window.Show();
         }
     }

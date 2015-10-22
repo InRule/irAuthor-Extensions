@@ -23,9 +23,13 @@ namespace ExtensionManager.Views
     {
         private readonly ExtensionBrowserViewModel viewModel;
 
-        public ExtensionBrowser()
+        public ExtensionBrowser() : this(new ExtensionBrowserViewModel())
         {
-            viewModel = new ExtensionBrowserViewModel();
+            
+        }
+        public ExtensionBrowser(ExtensionBrowserViewModel vm)
+        {
+            viewModel = vm;
             viewModel.ExtensionBrowserView = this;
             DataContext = viewModel;
 
