@@ -17,7 +17,6 @@ namespace ExtensionManager
     public class Extension : ExtensionBase
     {
         public VisualDelegateCommand ViewGalleryCommand { get; private set; }
-
         
         public Extension() 
             : base(name: "Extension Manager for IrAuthor", 
@@ -37,6 +36,7 @@ namespace ExtensionManager
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
             group.AddButton(ViewGalleryCommand);
+
         }
 
         private void ViewGallery(object obj)
@@ -44,6 +44,9 @@ namespace ExtensionManager
             var settings = SettingsStorageService.LoadSettings<ExtensionManagerSettings>(new Guid(Constants.SettingsKey), true);
             
             var viewModel = new ExtensionBrowserViewModel(settings);
+            viewModel.SettingsChanged +=
+                (sender, managerSettings) =>
+                    SettingsStorageService.SaveSettings(new Guid(Constants.SettingsKey), "", managerSettings);
             var window = new ExtensionBrowser(viewModel)
             {
                 Owner = Application.Current.MainWindow

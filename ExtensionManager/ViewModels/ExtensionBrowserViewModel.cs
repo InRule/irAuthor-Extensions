@@ -6,18 +6,26 @@ using System.Windows;
 using System.Windows.Input;
 using ExtensionManager.Commands;
 using ExtensionManager.Views;
+using InRule.Authoring.Services;
 using InRule.Authoring.Windows;
 
 namespace ExtensionManager.ViewModels
 {
     using NuGet;
 
+    public class ExtensionRowViewModel
+    {
+        public IPackage Package { get; set; }
+        public bool IsInstalled { get; set; }
+        public bool IsEnabled { get; set; }
+    }
+
     public class ExtensionBrowserViewModel : IDisposable
     {
-        public ExtensionBrowser ExtensionBrowserView { private get; set; }
-        public ObservableCollection<IPackage> Extensions { get; }
+        public event EventHandler<ExtensionManagerSettings> SettingsChanged;
 
-        public ObservableCollection<string> InstalledExtensions { get; } 
+        public ExtensionBrowser ExtensionBrowserView { private get; set; }
+        public ObservableCollection<ExtensionRowViewModel> Extensions { get; } 
         public ICommand AddExtensionCommand { get; }
         public ICommand RemoveExtensionCommand { get; }
 
@@ -29,23 +37,23 @@ namespace ExtensionManager.ViewModels
 
         public ExtensionBrowserViewModel() : this(new ExtensionManagerSettings())
         {
-            Extensions = new ObservableCollection<IPackage>();
-            repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
-            RefreshPackageList();
-
-            var addExt = new AddExtensionCommand(ExtensionsDirectory, repository);
-            addExt.CommandComplete +=AddExtensionComplete;
-            AddExtensionCommand = addExt;
-
-            var remExt = new RemoveExtensionCommand(ExtensionsDirectory, repository);
-            remExt.CommandComplete += RemoveExtensionCommandComplete;
-            RemoveExtensionCommand = remExt;
+            
         }
 
         public ExtensionBrowserViewModel(ExtensionManagerSettings settings)
         {
             this.settings = settings;
-            InstalledExtensions = new ObservableCollection<string>(settings.InstalledExtensions);
+            Extensions = new ObservableCollection<ExtensionRowViewModel>();
+            repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
+            RefreshPackageList();
+
+            var addExt = new AddExtensionCommand(ExtensionsDirectory, repository);
+            addExt.CommandComplete += AddExtensionComplete;
+            AddExtensionCommand = addExt;
+
+            var remExt = new RemoveExtensionCommand(ExtensionsDirectory, repository);
+            remExt.CommandComplete += RemoveExtensionCommandComplete;
+            RemoveExtensionCommand = remExt;
         }
 
         private void RemoveExtensionCommandComplete(object sender, ExtensionCommandEventArgs eventArgs)
@@ -55,34 +63,59 @@ namespace ExtensionManager.ViewModels
 
         private void AddExtensionComplete(object sender, ExtensionCommandEventArgs eventArgs)
         {
-            if (!string.IsNullOrWhiteSpace(eventArgs.ExtensionId))
-            {
-                InstalledExtensions.Add(eventArgs.ExtensionId);
-            }
 
+            var extension = eventArgs.Extension;
+            extension.IsInstalled = true;
+
+            settings.InstalledExtensions.Add(extension.Package.Id);
+            if (SettingsChanged != null)
+            {
+                SettingsChanged(this, settings);
+            }
             var result = MessageBox.Show(ExtensionBrowserView,
                        "Extension installed. IrAuthor must be restarted before you can use your new extension. Would you like to close IrAuthor now?",
                        "Restart needed", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                Environment.Exit(0);
+                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                Application.Current.Shutdown();
             }
         }
 
         public void RefreshPackageList()
         {
-            var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList();
+            //var packages = repository.GetPackages()
+            //    .Where(x => x.Tags.Contains("extension"))
+            //    .ToList()
+            //    .Join(settings.InstalledExtensions, package => package.Id, s => s,
+            //        (package, s) =>
+            //            new ExtensionRowViewModel
+            //            {
+            //                Package = package,
+            //                IsInstalled = !string.IsNullOrWhiteSpace(s),
+            //                IsEnabled = false
+            //            })
+            //    .ToList();
+            var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList()
+                .Select(pkg => new ExtensionRowViewModel {Package = pkg, IsInstalled = settings.InstalledExtensions.Contains(pkg.Id)});
+
             Extensions.Clear();
             Extensions.AddRange(packages);
         }
 
         public void Dispose()
         {
-            var command = AddExtensionCommand as AddExtensionCommand;
-            if (command != null)
+            var addCommand = AddExtensionCommand as AddExtensionCommand;
+            if (addCommand != null)
             {
-                command.CommandComplete -= AddExtensionComplete;
+                addCommand.CommandComplete -= AddExtensionComplete;
             }
+            var removeCommand = RemoveExtensionCommand as RemoveExtensionCommand;
+            if (removeCommand != null)
+            {
+                removeCommand.CommandComplete -= RemoveExtensionCommandComplete;
+            }
+
         }
     }
 }

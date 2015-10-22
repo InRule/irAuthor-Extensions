@@ -24,21 +24,22 @@
                 <DataGridTemplateColumn CanUserReorder="False" CanUserResize="False" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding IconUrl}" Margin="7,5"></Image>
+                            <Image Source="{Binding Package.IconUrl}" Margin="7,5"></Image>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Id, Mode=OneWay}" Header="Name" CanUserReorder="False" MinWidth="30"/>
-                <DataGridTextColumn Binding="{Binding Description, Mode=OneWay}" Header="Description" CanUserReorder="False" MinWidth="40"/>
-                <DataGridTextColumn Binding="{Binding Authors, Mode=OneWay}" Header="Author(s)" CanUserReorder="False" MinWidth="30"/>
-                <DataGridTextColumn Binding="{Binding Version, Mode=OneWay}" Header="Version" CanUserReorder="False"/>
-                <DataGridTextColumn Binding="{Binding Published, Mode=OneWay, StringFormat=\{0:d\}}" Header="Release Date" CanUserReorder="False"/>
+                <DataGridTextColumn Binding="{Binding Package.Id, Mode=OneWay}" Header="Name" CanUserReorder="False" MinWidth="30"/>
+                <DataGridTextColumn Binding="{Binding Package.Description, Mode=OneWay}" Header="Description" CanUserReorder="False" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Package.Authors, Mode=OneWay}" Header="Author(s)" CanUserReorder="False" MinWidth="30"/>
+                <DataGridTextColumn Binding="{Binding Package.Version, Mode=OneWay}" Header="Version" CanUserReorder="False"/>
+                <DataGridTextColumn Binding="{Binding Package.Published, Mode=OneWay, StringFormat=\{0:d\}}" Header="Release Date" CanUserReorder="False"/>
+                <DataGridTextColumn Binding="{Binding IsInstalled, Mode=OneWay}" Header="Installed" CanUserReorder="False"/>
                 <DataGridTemplateColumn CanUserReorder="False" CanUserResize="False" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3"/>
-                                <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3"/>
+                                <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+                                <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
                             </WrapPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using ExtensionManager.ViewModels;
 using NuGet;
 
 namespace ExtensionManager.Commands
@@ -10,24 +11,21 @@ namespace ExtensionManager.Commands
         public AddExtensionCommand(string extensionPath, IPackageRepository repos) : base(extensionPath, repos) {}
         public override bool CanExecute(object parameter)
         {
-            var s = parameter as string;
+            var s = parameter as ExtensionRowViewModel;
 
-            return s != null && Repository.Exists(s);
+            return s?.Package != null && !s.IsInstalled;
         }
 
         public override void Execute(object parameter)
         {
-            var packageId = parameter as string ?? string.Empty;
-            if (string.IsNullOrWhiteSpace(packageId))
-            {
-                return;
-            }
+            var packageVm = parameter as ExtensionRowViewModel;
+            if (packageVm == null) return;
 
-            var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, packageId));
+            var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, packageVm.Package.Id));
             
             try
             {
-                packageManager.InstallPackage(packageId);
+                packageManager.InstallPackage(packageVm.Package, false, true);
 
             }
             catch (Exception ex)
@@ -35,7 +33,7 @@ namespace ExtensionManager.Commands
                 MessageBox.Show(ex.ToString());
                 throw;
             }
-            InvokeCommandComplete(packageId);
+            InvokeCommandComplete(packageVm);
         }
 
         public override event EventHandler CanExecuteChanged;

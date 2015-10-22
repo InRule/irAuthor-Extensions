@@ -4,7 +4,7 @@ namespace ExtensionManager
 {
     public class ExtensionManagerSettings
     {
-        public IEnumerable<string> InstalledExtensions { get; set; }
+        public List<string> InstalledExtensions { get; set; }
 
         public ExtensionManagerSettings()
         {

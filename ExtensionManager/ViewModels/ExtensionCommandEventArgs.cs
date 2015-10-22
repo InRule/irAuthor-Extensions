@@ -4,11 +4,11 @@ namespace ExtensionManager.ViewModels
 {
     class ExtensionCommandEventArgs : EventArgs
     {
-        public ExtensionCommandEventArgs(string packageId = "")
+        public ExtensionCommandEventArgs(ExtensionRowViewModel extension)
         {
-            ExtensionId = packageId;
+            Extension = extension;
         }
 
-        public string ExtensionId { get; set; }
+        public ExtensionRowViewModel Extension { get; set; }
     }
 }

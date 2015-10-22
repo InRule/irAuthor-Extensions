@@ -15,7 +15,7 @@ namespace ExtensionManager.Commands
         public abstract event EventHandler CanExecuteChanged;
         public event EventHandler<ExtensionCommandEventArgs> CommandComplete;
 
-        protected void InvokeCommandComplete(string packageId)
+        protected void InvokeCommandComplete(ExtensionRowViewModel packageId)
         {
             CommandComplete?.Invoke(this, new ExtensionCommandEventArgs(packageId));
         }
