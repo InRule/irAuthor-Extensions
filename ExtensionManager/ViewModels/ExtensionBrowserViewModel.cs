@@ -100,7 +100,8 @@ namespace ExtensionManager.ViewModels
         public override bool CanExecute(object parameter)
         {
             var s = parameter as string;
-            return true;
+            var packageList = File.ReadAllLines(ExtensionManager.Constants.PackageListFileName, Encoding.UTF8);
+            return s != null && packageList.Contains(s);
         }
 
         public override void Execute(object parameter)
@@ -117,7 +118,9 @@ namespace ExtensionManager.ViewModels
         public override bool CanExecute(object parameter)
         {
             var s = parameter as string;
-            return s != null && Repository.Exists(s);
+            var packageList = File.ReadAllLines(ExtensionManager.Constants.PackageListFileName, Encoding.UTF8);
+            
+            return s != null && Repository.Exists(s) && !packageList.Contains(s);
         }
 
         public override void Execute(object parameter)
@@ -128,8 +131,9 @@ namespace ExtensionManager.ViewModels
                 return;
             }
             
-            var packageList = File.ReadAllLines(ExtensionManager.Constants.PackageListFileName, Encoding.UTF8);
+            
             var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, packageId));
+            
             try
             {
                 packageManager.InstallPackage(packageId);

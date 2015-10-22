@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,11 @@ namespace ExtensionManager
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
             group.AddButton(ViewGalleryCommand);
+
+            if (!File.Exists(Constants.PackageListFileName))
+            {
+                File.WriteAllLines(Constants.PackageListFileName, new string[0]);
+            }
 
 
         }
