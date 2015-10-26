@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using ExtensionManager.ViewModels;
 using NuGet;
 
@@ -17,6 +18,9 @@ namespace ExtensionManager.Commands
         public override void Execute(object parameter)
         {
             var s = parameter as ExtensionRowViewModel;
+            
+            s.IsInstalled = false;
+            s.IsEnabled = false;
             InvokeCommandComplete(s);
         }
         

@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ExtensionManager.ViewModels;
 using ExtensionManager.Views;
 using InRule.Authoring.Commanding;
-using InRule.Authoring.Extensions;
 using InRule.Authoring.Media;
 using InRule.Authoring.Windows;
 
@@ -21,7 +15,7 @@ namespace ExtensionManager
         public Extension() 
             : base(name: "Extension Manager for IrAuthor", 
                   description: "Browse, manage, and install extensions from the extension gallery", 
-                  guid: new Guid("{27B24F4A-E2FD-42D0-8B9F-639E99E72A35}"), 
+                  guid: new Guid("{A948BB74-0A66-4C71-858D-0225C0D17AAB}"), 
                   isSystemExtension: true)
         {
         }
@@ -36,6 +30,7 @@ namespace ExtensionManager
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
             group.AddButton(ViewGalleryCommand);
+            
 
         }
 
@@ -47,6 +42,7 @@ namespace ExtensionManager
             viewModel.SettingsChanged +=
                 (sender, managerSettings) =>
                     SettingsStorageService.SaveSettings(new Guid(Constants.SettingsKey), "", managerSettings);
+
             var window = new ExtensionBrowser(viewModel)
             {
                 Owner = Application.Current.MainWindow
