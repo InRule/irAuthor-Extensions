@@ -21,6 +21,9 @@ namespace ExtensionManager.Commands
             
             s.IsInstalled = false;
             s.IsEnabled = false;
+
+            Repository.RemovePackage(s.Package);
+
             InvokeCommandComplete(s);
         }
         
