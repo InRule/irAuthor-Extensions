@@ -9,31 +9,36 @@
         d:DataContext="{d:DesignInstance Type=viewModels:ExtensionBrowserViewModel, IsDesignTimeCreatable=True}"
         Title="Extension Browser" 
         Topmost="True" 
-        WindowStyle="ToolWindow">
+        WindowStyle="ToolWindow" Width="900">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="45" />
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Right" Grid.Row="0"  VerticalAlignment="Center">
-            <Button Content="Refresh Extension List" Click="refreshButton_Click" Height="25" Padding="5,5"  />
-        </StackPanel>
-        <DataGrid MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" CanUserResizeColumns="False" GridLinesVisibility="Horizontal">
+        <DockPanel Grid.Row="0"  VerticalAlignment="Center" >
+            <Label x:Name="label" Content="Extension Browser for IrAuthor" FontSize="21" FontWeight="Bold"  />
+            <Button Content="Refresh List" Click="refreshButton_Click" Height="25" Padding="5,5" DockPanel.Dock="Right" Width="100" HorizontalAlignment="Right" Margin="5,0"  />
+        </DockPanel>
+        <DataGrid x:Name="dataGrid" MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False" 
+                  Grid.Row="1" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
+                  CanUserResizeColumns="False" GridLinesVisibility="Horizontal" SelectionMode="Single" SelectedIndex="0">
             <DataGrid.Columns>
                 <DataGridTemplateColumn >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="viewModels:ExtensionRowViewModel">
-                            <Image Source="{Binding Package.IconUrl}" Margin="7,5"></Image>
+                            <Image Source="{Binding PackageMetadata.IconUrl}" Margin="7,5"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Package.Id, Mode=OneWay}" Header="Name" MinWidth="30"/>
-                <DataGridTextColumn Binding="{Binding Package.Description, Mode=OneWay}" Header="Description" MinWidth="40"/>
-                <DataGridTextColumn Binding="{Binding Package.Authors, Mode=OneWay}" Header="Author(s)" MinWidth="30"/>
-                <DataGridTextColumn Binding="{Binding Package.Version, Mode=OneWay}" Header="Version" />
+                <DataGridTextColumn Binding="{Binding PackageMetadata.Id, Mode=OneWay}" Header="Id" MinWidth="30"/>
+                <DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />
                 <DataGridTextColumn Binding="{Binding Package.Published, Mode=OneWay, StringFormat=\{0:d\}}" Header="Release Date" />
                 <DataGridTextColumn Binding="{Binding IsInstalled, Mode=OneWay}" Header="Installed" />
                 <DataGridTemplateColumn >
@@ -48,5 +53,42 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.RowSpan="2" >
+            <Border VerticalAlignment="Center" Margin="4,7" BorderThickness="0,0,0,1" BorderBrush="Black" Padding="0,4,0,4">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding PackageMetadata.IconUrl}" Stretch="None" HorizontalAlignment="Left"  />
+                    <Label Content="{Binding PackageMetadata.Title}" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold"     />
+                </StackPanel>
+            </Border>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Label Content="Description:" FontWeight="Bold"  />
+                    <Label Content="{Binding PackageMetadata.Description}" Margin="9,0,0,0" />
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <Label Content="Author(s):" FontWeight="Bold"  />
+                    <Label Content="{Binding PackageMetadata.Authors}" Margin="9,0,0,0"  />
+                </StackPanel>
+                <StackPanel Grid.Row="2" >
+                    <Label Content="Tags:" FontWeight="Bold"  />
+                    <Label Content="{Binding PackageMetadata.Tags}" Margin="9,0,0,0" />
+                </StackPanel>
+                <StackPanel Grid.Row="3" >
+                    <Label Content="Version" FontWeight="Bold"  />
+                    <Label Content="{Binding PackageMetadata.Version}" Margin="9,0,0,0" />
+                </StackPanel>
+
+            </Grid>
+
+        </StackPanel>
+
     </Grid>
 </Window>

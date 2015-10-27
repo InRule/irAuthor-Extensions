@@ -11,11 +11,13 @@ using InRule.Authoring.Windows;
 
 namespace ExtensionManager.ViewModels
 {
-    using NuGet;
+    using NuGet;    
 
     public class ExtensionRowViewModel
     {
         public IPackage Package { get; set; }
+
+        public IPackageMetadata PackageMetadata {  get { return Package as IPackageMetadata; } }
         public bool IsInstalled { get; set; }
         public bool IsEnabled { get; set; }
     }
