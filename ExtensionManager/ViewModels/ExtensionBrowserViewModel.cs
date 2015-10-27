@@ -104,7 +104,7 @@ namespace ExtensionManager.ViewModels
             InvokeSettingsChanged();
 
             var result = MessageBox.Show(ExtensionBrowserView,
-                       "Extension installed. IrAuthor must be restarted before you can use your new extension. Would you like to close IrAuthor now?",
+                       "Extension installed. IrAuthor must be restarted before you can use your new extension. Would you like to restart IrAuthor now?",
                        "Restart needed", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {

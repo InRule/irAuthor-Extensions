@@ -2,6 +2,8 @@ using System;
 using System.Diagnostics;
 using ExtensionManager.ViewModels;
 using NuGet;
+using System.Windows;
+using System.IO;
 
 namespace ExtensionManager.Commands
 {
@@ -21,9 +23,17 @@ namespace ExtensionManager.Commands
             
             s.IsInstalled = false;
             s.IsEnabled = false;
-
-            Repository.RemovePackage(s.Package);
-
+            var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, s.Package.Id));
+            
+            try
+            {
+                packageManager.UninstallPackage(s.Package);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                throw;
+            }
             InvokeCommandComplete(s);
         }
         
