@@ -24,10 +24,12 @@ namespace ExtensionManager.Commands
             s.IsInstalled = false;
             s.IsEnabled = false;
             var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, s.Package.Id));
+            packageManager.Logger = new DebugLogger();
+            packageManager.FileSystem.Logger = packageManager.Logger;
             
             try
             {
-                packageManager.UninstallPackage(s.Package);
+                packageManager.UninstallPackage(s.Package, true, true);
             }
             catch (Exception ex)
             {

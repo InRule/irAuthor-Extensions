@@ -22,7 +22,9 @@ namespace ExtensionManager.Commands
             if (packageVm == null) return;
 
             var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, packageVm.Package.Id));
-            
+            packageManager.Logger = new DebugLogger();
+            packageManager.FileSystem.Logger = packageManager.Logger;
+
             try
             {
                 packageManager.InstallPackage(packageVm.Package, false, true);

@@ -13,6 +13,22 @@ namespace ExtensionManager.ViewModels
 {
     using NuGet;
     using System.ComponentModel;
+    using System.Diagnostics;
+    using System.IO;
+
+    public class DebugLogger : ILogger
+    {
+        public void Log(MessageLevel level, string message, params object[] parameters)
+        {
+            Debug.WriteLine(string.Format("{0}: {1}", level, string.Format(message, parameters)));
+        }
+
+        public FileConflictResolution ResolveFileConflict(string conflict)
+        {
+            Log(MessageLevel.Error, conflict);
+            return FileConflictResolution.Ignore;
+        }
+    }
 
     public class ExtensionRowViewModel : INotifyPropertyChanged
     {
@@ -59,7 +75,7 @@ namespace ExtensionManager.ViewModels
         public ICommand RemoveExtensionCommand { get; }
 
         private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
-        private const string ExtensionsDirectory = @"C:\Program Files (x86)\InRule\IrAuthor\Extensions\Extension Manager";
+        private readonly string ExtensionsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"InRule\irAuthor\ExtensionExchange");
 
         private readonly IPackageRepository repository;
         private ExtensionManagerSettings settings;
