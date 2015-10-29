@@ -107,7 +107,8 @@ namespace ExtensionManager.ViewModels
             extension.IsInstalled = false;
             settings.InstalledExtensions.Remove(extension.Package.Id);
             InvokeSettingsChanged();
-            MessageBox.Show("Extension removed.");
+
+            RestartApplicationWithConfirm();
         }
 
         private void AddExtensionComplete(object sender, ExtensionCommandEventArgs eventArgs)
@@ -118,9 +119,13 @@ namespace ExtensionManager.ViewModels
 
             settings.InstalledExtensions.Add(extension.Package.Id);
             InvokeSettingsChanged();
+            RestartApplicationWithConfirm();
+        }
 
+        private void RestartApplicationWithConfirm()
+        {
             var result = MessageBox.Show(ExtensionBrowserView,
-                       "Extension installed. IrAuthor must be restarted before you can use your new extension. Would you like to restart IrAuthor now?",
+                       "Requested operation has been completed. IrAuthor must be restarted before your changes can take effect. Would you like to restart IrAuthor now?",
                        "Restart needed", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
