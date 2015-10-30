@@ -54,6 +54,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.RowSpan="2" >
+            <ProgressBar DataContext="{Binding DataContext, ElementName=dataGrid}" Height="22" Margin="7" IsIndeterminate="{Binding ShowProgress}" />
             <Border VerticalAlignment="Center" Margin="4,7" BorderThickness="0,0,0,1" BorderBrush="Black" Padding="0,4,0,4">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding PackageMetadata.IconUrl}" Stretch="None" HorizontalAlignment="Left"  />

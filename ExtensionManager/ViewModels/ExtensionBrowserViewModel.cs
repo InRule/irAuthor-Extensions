@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ExtensionManager.Commands;
 using ExtensionManager.Views;
-using InRule.Authoring.Services;
-using InRule.Authoring.Windows;
 
 namespace ExtensionManager.ViewModels
 {
@@ -20,7 +19,7 @@ namespace ExtensionManager.ViewModels
     {
         public void Log(MessageLevel level, string message, params object[] parameters)
         {
-            Debug.WriteLine(string.Format("{0}: {1}", level, string.Format(message, parameters)));
+            Debug.WriteLine($"{level}: {string.Format(message, parameters)}");
         }
 
         public FileConflictResolution ResolveFileConflict(string conflict)
@@ -30,150 +29,110 @@ namespace ExtensionManager.ViewModels
         }
     }
 
-    public class ExtensionRowViewModel : INotifyPropertyChanged
-    {
-        public IPackage Package { get; set; }
-
-        public IPackageMetadata PackageMetadata {  get { return Package as IPackageMetadata; } }
-
-        public bool IsInstalled
-        {
-            get { return isInstalled; }
-            set
-            {
-                var shouldRaise = isInstalled == value;
-                isInstalled = value;
-                if (PropertyChanged != null && shouldRaise) {
-                    PropertyChanged(this, new PropertyChangedEventArgs("IsInstalled"));
-                }
-            }
-        }
-        private bool isInstalled;
-        public bool IsEnabled {
-            get { return isEnabled; }
-            set
-            {
-                var shouldRaise = isEnabled == value;
-                isEnabled = value;
-                if (PropertyChanged != null && shouldRaise)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("IsEnabled"));
-                }
-            }
-        }
-        private bool isEnabled;
-        public event PropertyChangedEventHandler PropertyChanged;
-    }
-
-    public class ExtensionBrowserViewModel : IDisposable
+    public class ExtensionBrowserViewModel : INotifyPropertyChanged, IDisposable
     {
         public event EventHandler<ExtensionManagerSettings> SettingsChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler WorkStarted;
+        public event EventHandler WorkComplete;
 
         public ExtensionBrowser ExtensionBrowserView { private get; set; }
-        public ObservableCollection<ExtensionRowViewModel> Extensions { get; } 
+        public ObservableCollection<ExtensionRowViewModel> Extensions { get; }
         public ICommand AddExtensionCommand { get; }
         public ICommand RemoveExtensionCommand { get; }
 
+        public int Progress {
+            get { return operationProgress; }
+            set {
+                if (operationProgress == value) return;
+                operationProgress = value;
+                Debug.WriteLine("Progress Changing");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Progress"));
+            }
+        }
+
+        public bool ShowProgress => Progress > 0;
+
         private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
         private readonly string ExtensionsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"InRule\irAuthor\ExtensionExchange");
-
         private readonly IPackageRepository repository;
-        private ExtensionManagerSettings settings;
 
-        public ExtensionBrowserViewModel() : this(new ExtensionManagerSettings())
-        {
-            
-        }
+        internal readonly ExtensionManagerSettings Settings;
+        private int operationProgress = 0;
+
+        public ExtensionBrowserViewModel() : this(new ExtensionManagerSettings()) {}
 
         public ExtensionBrowserViewModel(ExtensionManagerSettings settings)
         {
-            this.settings = settings;
+            Settings = settings;
             Extensions = new ObservableCollection<ExtensionRowViewModel>();
             repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
-            RefreshPackageList();
+            
 
-            var addExt = new AddExtensionCommand(ExtensionsDirectory, repository);
-            addExt.CommandComplete += AddExtensionComplete;
+            var addExt = new AddExtensionCommand(ExtensionsDirectory, repository, this);
             AddExtensionCommand = addExt;
 
-            var remExt = new RemoveExtensionCommand(ExtensionsDirectory, repository);
-            remExt.CommandComplete += RemoveExtensionCommandComplete;
+            var remExt = new RemoveExtensionCommand(ExtensionsDirectory, repository, this);
             RemoveExtensionCommand = remExt;
+            PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != "Progress") return;
+                Debug.WriteLine("ShowProgress changing");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShowProgress"));
+            };
+            
+            WorkStarted += (sender, e) => Progress = 1;
+            WorkComplete += (sender, e) => Progress = 0;
+
+            RefreshPackageList();
         }
 
-        private void RemoveExtensionCommandComplete(object sender, ExtensionCommandEventArgs eventArgs)
+        public void RaiseWorkStarted()
         {
-            var extension = eventArgs.Extension;
-            extension.IsInstalled = false;
-            settings.InstalledExtensions.Remove(extension.Package.Id);
-            InvokeSettingsChanged();
-
-            RestartApplicationWithConfirm();
+            Debug.WriteLine("Raising WorkStarted");
+            WorkStarted?.Invoke(this, EventArgs.Empty);
         }
 
-        private void AddExtensionComplete(object sender, ExtensionCommandEventArgs eventArgs)
+        public void RaiseWorkComplete()
         {
-
-            var extension = eventArgs.Extension;
-            extension.IsInstalled = true;
-
-            settings.InstalledExtensions.Add(extension.Package.Id);
-            InvokeSettingsChanged();
-            RestartApplicationWithConfirm();
+            Debug.WriteLine("Raising WorkComplete");
+            WorkComplete?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RestartApplicationWithConfirm()
+        internal void RestartApplicationWithConfirm()
         {
             var result = MessageBox.Show(ExtensionBrowserView,
                        "Requested operation has been completed. IrAuthor must be restarted before your changes can take effect. Would you like to restart IrAuthor now?",
                        "Restart needed", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                Application.Current.Shutdown();
-            }
+
+            if (result != MessageBoxResult.Yes) return;
+
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
 
         public void RefreshPackageList()
         {
-            //var packages = repository.GetPackages()
-            //    .Where(x => x.Tags.Contains("extension"))
-            //    .ToList()
-            //    .Join(settings.InstalledExtensions, package => package.Id, s => s,
-            //        (package, s) =>
-            //            new ExtensionRowViewModel
-            //            {
-            //                Package = package,
-            //                IsInstalled = !string.IsNullOrWhiteSpace(s),
-            //                IsEnabled = false
-            //            })
-            //    .ToList();
-            var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList()
-                .Select(pkg => new ExtensionRowViewModel {Package = pkg, IsInstalled = settings.InstalledExtensions.Contains(pkg.Id)});
-
-            Extensions.Clear();
-            Extensions.AddRange(packages);
-        }
-
-        private void InvokeSettingsChanged()
-        {
-            if (SettingsChanged != null)
+            var dispatcher = Dispatcher.CurrentDispatcher;
+            RaiseWorkStarted(); 
+            Task.Factory.StartNew(() =>
             {
-                SettingsChanged(this, settings);
-            }
+                Debug.WriteLine("In refresh packages Task");
+                var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList()
+                .Select(pkg => new ExtensionRowViewModel { Package = pkg, IsInstalled = Settings.InstalledExtensions.Contains(pkg.Id) });
+
+                dispatcher.BeginInvoke(new Action(() => { Extensions.Clear(); Extensions.AddRange(packages);}));
+
+            }).ContinueWith((t) => RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());
         }
+
+        internal void InvokeSettingsChanged()
+        {
+            SettingsChanged?.Invoke(this, Settings);
+        }
+
         public void Dispose()
         {
-            var addCommand = AddExtensionCommand as AddExtensionCommand;
-            if (addCommand != null)
-            {
-                addCommand.CommandComplete -= AddExtensionComplete;
-            }
-            var removeCommand = RemoveExtensionCommand as RemoveExtensionCommand;
-            if (removeCommand != null)
-            {
-                removeCommand.CommandComplete -= RemoveExtensionCommandComplete;
-            }
 
         }
     }
