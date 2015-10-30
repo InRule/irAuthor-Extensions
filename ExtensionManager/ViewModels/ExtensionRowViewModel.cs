@@ -7,22 +7,37 @@ namespace ExtensionManager.ViewModels
     {
         public IPackage Package { get; set; }
 
-        public IPackageMetadata PackageMetadata { get { return Package as IPackageMetadata; } }
+        public IPackageMetadata PackageMetadata => Package as IPackageMetadata;
 
+        private bool updateAvailable;
+        public bool UpdateAvailable
+        {
+            get { return updateAvailable; }
+            set
+            {
+                if (value != updateAvailable)
+                {
+                    updateAvailable = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateAvailable"));
+                }
+            }
+        }
+
+        private bool isInstalled;
         public bool IsInstalled
         {
             get { return isInstalled; }
             set
             {
-                var shouldRaise = isInstalled == value;
-                isInstalled = value;
-                if (PropertyChanged != null && shouldRaise)
+                if (isInstalled != value)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("IsInstalled"));
+                    isInstalled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsInstalled"));
                 }
             }
         }
-        private bool isInstalled;
+
+        private bool isEnabled;
         public bool IsEnabled
         {
             get { return isEnabled; }
@@ -36,7 +51,7 @@ namespace ExtensionManager.ViewModels
                 }
             }
         }
-        private bool isEnabled;
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

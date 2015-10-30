@@ -15,15 +15,15 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0"  VerticalAlignment="Center" >
-            <Label x:Name="label" Content="Extension Browser for IrAuthor" FontSize="21" FontWeight="Bold"  />
+            <Label  Content="Extension Browser for IrAuthor" FontSize="21" FontWeight="Bold"  />
             <Button Content="Refresh List" Click="refreshButton_Click" Height="25" Padding="5,5" DockPanel.Dock="Right" Width="100" HorizontalAlignment="Right" Margin="5,0"  />
         </DockPanel>
         <DataGrid x:Name="dataGrid" MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False" 
@@ -40,12 +40,12 @@
                 <DataGridTextColumn Binding="{Binding PackageMetadata.Id, Mode=OneWay}" Header="Id" MinWidth="30"/>
                 <DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />
                 <DataGridTextColumn Binding="{Binding Package.Published, Mode=OneWay, StringFormat=\{0:d\}}" Header="Release Date" />
-                <DataGridTextColumn Binding="{Binding IsInstalled, Mode=OneWay}" Header="Installed" />
                 <DataGridTemplateColumn >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
+                                <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
                                 <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,3" Padding="5,3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
                             </WrapPanel>
                         </DataTemplate>
@@ -53,8 +53,9 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.RowSpan="2" >
-            <ProgressBar DataContext="{Binding DataContext, ElementName=dataGrid}" Height="22" Margin="7" IsIndeterminate="{Binding ShowProgress}" />
+        <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.Row="0"
+                    Grid.RowSpan="2" >
+            <ProgressBar DataContext="{Binding DataContext, ElementName=dataGrid}" Height="22" Margin="12" IsIndeterminate="{Binding ShowProgress}" />
             <Border VerticalAlignment="Center" Margin="4,7" BorderThickness="0,0,0,1" BorderBrush="Black" Padding="0,4,0,4">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding PackageMetadata.IconUrl}" Stretch="None" HorizontalAlignment="Left"  />
@@ -82,9 +83,11 @@
                     <Label Content="Tags:" FontWeight="Bold"  />
                     <Label Content="{Binding PackageMetadata.Tags}" Margin="9,0,0,0" />
                 </StackPanel>
-                <StackPanel Grid.Row="3" >
+                <StackPanel Grid.Row="3">
                     <Label Content="Version" FontWeight="Bold"  />
                     <Label Content="{Binding PackageMetadata.Version}" Margin="9,0,0,0" />
+                    <Label Content="Release Date" FontWeight="Bold"  />
+                    <Label Content="{Binding Package.Published.Date, Mode=OneWay, StringFormat=\{0:d\}}" Margin="9,0,0,0" />
                 </StackPanel>
 
             </Grid>

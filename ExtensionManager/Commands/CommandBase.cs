@@ -16,12 +16,8 @@ namespace ExtensionManager.Commands
         public abstract void Execute(object parameter);
 
         public abstract event EventHandler CanExecuteChanged;
-        public event EventHandler<ExtensionCommandEventArgs> CommandComplete;
-
-        protected void InvokeCommandComplete(ExtensionRowViewModel packageId)
-        {
-            CommandComplete?.Invoke(this, new ExtensionCommandEventArgs(packageId));
-        }
+        
+        protected PackageManager PackageManager => ViewModel.PackageManager;
 
         protected CommandBase(string extensionPath, IPackageRepository repos, ExtensionBrowserViewModel viewModel)
         {

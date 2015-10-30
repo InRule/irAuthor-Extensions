@@ -23,25 +23,16 @@ namespace ExtensionManager.Commands
         {
             var s = parameter as ExtensionRowViewModel;
             Debug.Assert(s != null);
-
-            s.IsInstalled = false;
-            s.IsEnabled = false;
-            var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, s.Package.Id))
-            {
-                Logger = new DebugLogger()
-            };
-            packageManager.FileSystem.Logger = packageManager.Logger;
-            
+             
             ViewModel.RaiseWorkStarted();
             var dispatcher = Dispatcher.CurrentDispatcher;
             Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    packageManager.UninstallPackage(s.Package, true, true);
                     s.IsInstalled = false;
-                    ViewModel.Settings.InstalledExtensions.Remove(s.Package.Id);
-                    ViewModel.InvokeSettingsChanged();
+                    s.IsEnabled = false;
+                    PackageManager.UninstallPackage(s.Package, true, true);
                     dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
                 }
                 catch (Exception ex)

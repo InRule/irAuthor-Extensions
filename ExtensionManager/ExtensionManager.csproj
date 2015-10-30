@@ -87,10 +87,12 @@
     <Compile Include="Commands\AddExtensionCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\RemoveExtensionCommand.cs" />
+    <Compile Include="Commands\UpdateExtensionCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="ExtensionManagerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DebugLogger.cs" />
     <Compile Include="ViewModels\ExtensionBrowserViewModel.cs" />
     <Compile Include="ViewModels\ExtensionCommandEventArgs.cs" />
     <Compile Include="ViewModels\ExtensionRowViewModel.cs" />

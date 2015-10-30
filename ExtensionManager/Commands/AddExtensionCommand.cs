@@ -24,21 +24,14 @@ namespace ExtensionManager.Commands
             var packageVm = parameter as ExtensionRowViewModel;
             if (packageVm == null) return;
 
-            var packageManager = new PackageManager(Repository, Path.Combine(InstallPath, packageVm.Package.Id))
-            {
-                Logger = new DebugLogger()
-            };
-            packageManager.FileSystem.Logger = packageManager.Logger;
-
             ViewModel.RaiseWorkStarted();
             var dispatcher = Dispatcher.CurrentDispatcher;
             Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    packageManager.InstallPackage(packageVm.Package, false, true);
+                    PackageManager.InstallPackage(packageVm.Package, false, true);
                     packageVm.IsInstalled = true;
-                    ViewModel.Settings.InstalledExtensions.Add(packageVm.Package.Id);
                     ViewModel.InvokeSettingsChanged();
                     dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
                 }

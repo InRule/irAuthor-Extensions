@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -14,20 +15,6 @@ namespace ExtensionManager.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
-
-    public class DebugLogger : ILogger
-    {
-        public void Log(MessageLevel level, string message, params object[] parameters)
-        {
-            Debug.WriteLine($"{level}: {string.Format(message, parameters)}");
-        }
-
-        public FileConflictResolution ResolveFileConflict(string conflict)
-        {
-            Log(MessageLevel.Error, conflict);
-            return FileConflictResolution.Ignore;
-        }
-    }
 
     public class ExtensionBrowserViewModel : INotifyPropertyChanged, IDisposable
     {
@@ -53,6 +40,13 @@ namespace ExtensionManager.ViewModels
 
         public bool ShowProgress => Progress > 0;
 
+        public ICommand UpdateExtensionCommand
+        {
+            get;
+        }
+
+        public readonly PackageManager PackageManager;
+
         private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
         private readonly string ExtensionsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"InRule\irAuthor\ExtensionExchange");
         private readonly IPackageRepository repository;
@@ -67,13 +61,21 @@ namespace ExtensionManager.ViewModels
             Settings = settings;
             Extensions = new ObservableCollection<ExtensionRowViewModel>();
             repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
-            
+            PackageManager = new PackageManager(repository, ExtensionsDirectory)
+            {
+                Logger = new DebugLogger()
+            };
+            PackageManager.FileSystem.Logger = PackageManager.Logger;
 
             var addExt = new AddExtensionCommand(ExtensionsDirectory, repository, this);
             AddExtensionCommand = addExt;
 
             var remExt = new RemoveExtensionCommand(ExtensionsDirectory, repository, this);
             RemoveExtensionCommand = remExt;
+
+            var updateExt = new UpdateExtensionCommand(ExtensionsDirectory, repository, this);
+            UpdateExtensionCommand = updateExt;
+
             PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName != "Progress") return;
@@ -118,9 +120,17 @@ namespace ExtensionManager.ViewModels
             Task.Factory.StartNew(() =>
             {
                 Debug.WriteLine("In refresh packages Task");
-                var packages = repository.GetPackages().Where(x => x.Tags.Contains("extension")).ToList()
-                .Select(pkg => new ExtensionRowViewModel { Package = pkg, IsInstalled = Settings.InstalledExtensions.Contains(pkg.Id) });
-
+                
+                var packages = repository.GetPackages()
+                    .Where(x => x.Tags.Contains("extension"))
+                    .ToList()
+                    .Select(x => new ExtensionRowViewModel
+                    { 
+                        IsInstalled = PackageManager.LocalRepository.Exists(x.Id),
+                        UpdateAvailable = PackageManager.LocalRepository.Exists(x.Id) && !x.IsLatestVersion,
+                        Package = x
+                    }).Where(x => x.Package.IsLatestVersion);
+                
                 dispatcher.BeginInvoke(new Action(() => { Extensions.Clear(); Extensions.AddRange(packages);}));
 
             }).ContinueWith((t) => RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());
@@ -135,5 +145,7 @@ namespace ExtensionManager.ViewModels
         {
 
         }
+
+        
     }
 }
