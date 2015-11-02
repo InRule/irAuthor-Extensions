@@ -51,7 +51,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding PackageMetadata.Id, Mode=OneWay}" Header="Title" MinWidth="30"/>
+                <DataGridTextColumn Binding="{Binding PackageMetadata.Title, Mode=OneWay}" MinWidth="60"/>
                 <DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />
                 <DataGridTextColumn Binding="{Binding Package.Published, Mode=OneWay, StringFormat=\{0:d\}}" Header="Release Date" />
                 <DataGridTemplateColumn >

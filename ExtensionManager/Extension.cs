@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows;
+using System.Collections.Generic;
 using ExtensionManager.ViewModels;
 using ExtensionManager.Views;
 using InRule.Authoring.Commanding;
 using InRule.Authoring.Media;
 using InRule.Authoring.Windows;
+using System.Linq;
 
 namespace ExtensionManager
 {
@@ -18,6 +20,7 @@ namespace ExtensionManager
                   guid: new Guid("{A948BB74-0A66-4C71-858D-0225C0D17AAB}"), 
                   isSystemExtension: true)
         {
+            Priority = 100000000; //ensures that the extension loads after other system extensions so that it can be the furthest element to the right.
         }
 
         public override void Enable()
@@ -26,10 +29,10 @@ namespace ExtensionManager
                 ImageFactory.GetImage("irAuthor", "Images/Extension32.png"), 
                 ImageFactory.GetImage("irAuthor", "Images/Extension32.png"), 
                 true);
-
+            
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
-            group.AddButton(ViewGalleryCommand);            
+            var button = group.AddButton(ViewGalleryCommand);
 
         }
 
