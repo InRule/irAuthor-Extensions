@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,6 +9,9 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using ExtensionManager.Commands;
 using ExtensionManager.Views;
+using InRule.Authoring.Services;
+using InRule.Authoring.Windows;
+using InRule.Authoring.Windows.Settings;
 
 namespace ExtensionManager.ViewModels
 {
@@ -44,7 +48,7 @@ namespace ExtensionManager.ViewModels
         {
             get;
         }
-
+        public IEnumerable<IExtension> InstalledExtensions { get; set; } 
         public readonly PackageManager PackageManager;
 
         private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
@@ -60,6 +64,7 @@ namespace ExtensionManager.ViewModels
         {
             Settings = settings;
             Extensions = new ObservableCollection<ExtensionRowViewModel>();
+            InstalledExtensions = new List<IExtension>();
             repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
             PackageManager = new PackageManager(repository, ExtensionsDirectory)
             {
@@ -116,7 +121,8 @@ namespace ExtensionManager.ViewModels
         public void RefreshPackageList()
         {
             var dispatcher = Dispatcher.CurrentDispatcher;
-            RaiseWorkStarted(); 
+            RaiseWorkStarted();
+            
             Task.Factory.StartNew(() =>
             {
                 Debug.WriteLine("In refresh packages Task");
@@ -125,12 +131,14 @@ namespace ExtensionManager.ViewModels
                     .Where(x => x.Tags.Contains("extension"))
                     .ToList()
                     .Select(x => new ExtensionRowViewModel
-                    { 
+                    {
                         IsInstalled = PackageManager.LocalRepository.Exists(x.Id),
                         UpdateAvailable = PackageManager.LocalRepository.Exists(x.Id) && !x.IsLatestVersion,
                         Package = x
-                    }).Where(x => x.Package.IsLatestVersion);
-                
+                    })
+                    .ToList()
+                    .Where(x => x.Package.IsLatestVersion);
+                Debug.WriteLine("Got packages. Invoking action on dispatcher to populate UI");
                 dispatcher.BeginInvoke(new Action(() => { Extensions.Clear(); Extensions.AddRange(packages);}));
 
             }).ContinueWith((t) => RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());

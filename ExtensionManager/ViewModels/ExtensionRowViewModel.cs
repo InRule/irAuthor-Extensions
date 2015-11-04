@@ -1,10 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using NuGet;
 
 namespace ExtensionManager.ViewModels
 {
     public class ExtensionRowViewModel : INotifyPropertyChanged
     {
+        public Guid ExtensionId { get; set; }
+
         public IPackage Package { get; set; }
 
         public IPackageMetadata PackageMetadata => Package as IPackageMetadata;

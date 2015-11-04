@@ -9,18 +9,18 @@
         d:DataContext="{d:DesignInstance Type=viewModels:ExtensionBrowserViewModel, IsDesignTimeCreatable=True}"
         Title="Extension Browser" 
         Topmost="True" 
-        WindowStyle="ToolWindow" Width="910">
+        WindowStyle="ToolWindow" Width="768" >
     <Window.Resources>
         <Style TargetType="{x:Type Button}" x:Key="IsInstalledHideShowInverse">
-           <Style.Triggers>
-               <DataTrigger Binding="{Binding IsInstalled}" Value="True">
-            <Setter Property="Visibility" Value="Hidden" />
-            </DataTrigger>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsInstalled, Mode=OneWay}" Value="True">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type Button}" x:Key="IsInstalledHideShow">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsInstalled}" Value="False">
+                <DataTrigger Binding="{Binding IsInstalled, Mode=OneWay}" Value="False">
                     <Setter Property="Visibility" Value="Hidden" />
                 </DataTrigger>
             </Style.Triggers>
@@ -30,19 +30,26 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
+            <RowDefinition Height="105" />
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0"  VerticalAlignment="Center" >
-            <Label  Content="Extension Browser for IrAuthor" FontSize="21" FontWeight="Bold"  />
-            <Button Content="Refresh List" Click="refreshButton_Click" Height="25" Padding="5,5" DockPanel.Dock="Right" Width="100" HorizontalAlignment="Right" Margin="5,0"  />
-        </DockPanel>
+        <Border Grid.Row="0" Grid.ColumnSpan="2"  VerticalAlignment="Center" Padding="2" Margin="0,0,0,4" BorderBrush="Black" BorderThickness="0,0,0,1" >
+            <StackPanel Orientation="Vertical" Height="101" >
+                 
+                    <Grid Height="38" Width="748">
+                        <Label  Content="Browse and Manage Extensions" FontSize="21" FontWeight="Bold"    />
+                        <Button Content="Refresh List" Click="refreshButton_Click" Padding="3" Margin="6" HorizontalAlignment="Right"     />
+                    </Grid>
+                 
+                <ProgressBar DataContext="{Binding DataContext, ElementName=dataGrid}" Height="25" Margin="6" Padding="6" IsIndeterminate="{Binding ShowProgress}" />
+            </StackPanel>
+        </Border>
         <DataGrid x:Name="dataGrid" MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False" 
-                  Grid.Row="1" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
-                  CanUserResizeColumns="False" GridLinesVisibility="Horizontal" SelectionMode="Single" SelectedIndex="0">
+                  Grid.Row="1" Grid.Column="0" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
+                  CanUserResizeColumns="False" GridLinesVisibility="None" SelectionMode="Single" SelectedIndex="0" HeadersVisibility="None">
             <DataGrid.Columns>
                 <DataGridTemplateColumn >
                     <DataGridTemplateColumn.CellTemplate>
@@ -53,8 +60,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding PackageMetadata.Title, Mode=OneWay}" MinWidth="60"/>
                 <DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />
-                <DataGridTextColumn Binding="{Binding Package.Published, Mode=OneWay, StringFormat=\{0:d\}}" Header="Release Date" />
-                <DataGridTemplateColumn >
+                <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -67,9 +73,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.Row="0"
-                    Grid.RowSpan="2" >
-            <ProgressBar DataContext="{Binding DataContext, ElementName=dataGrid}" Height="22" Margin="12" IsIndeterminate="{Binding ShowProgress}" />
+        <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.Row="1"  >
             <Border VerticalAlignment="Center" Margin="4,7" BorderThickness="0,0,0,1" BorderBrush="Black" Padding="0,4,0,4">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding PackageMetadata.IconUrl}" Stretch="None" HorizontalAlignment="Left"  />

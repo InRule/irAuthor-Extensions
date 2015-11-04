@@ -73,6 +73,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -89,7 +90,7 @@
     <Compile Include="Commands\RemoveExtensionCommand.cs" />
     <Compile Include="Commands\UpdateExtensionCommand.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Extension.cs" />
+    <Compile Include="ExtensionManagerExtension.cs" />
     <Compile Include="ExtensionManagerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DebugLogger.cs" />

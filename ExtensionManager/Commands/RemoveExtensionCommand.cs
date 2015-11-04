@@ -33,6 +33,7 @@ namespace ExtensionManager.Commands
                     s.IsInstalled = false;
                     s.IsEnabled = false;
                     PackageManager.UninstallPackage(s.Package, true, true);
+                    ViewModel.InvokeSettingsChanged();
                     dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
                 }
                 catch (Exception ex)

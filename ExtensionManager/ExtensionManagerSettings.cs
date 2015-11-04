@@ -4,11 +4,10 @@ namespace ExtensionManager
 {
     public class ExtensionManagerSettings
     {
-        public List<string> InstalledExtensions { get; set; }
-
+        public List<string> EnabledExtensions { get; set; }
         public ExtensionManagerSettings()
         {
-            InstalledExtensions = new List<string>();
+            EnabledExtensions = new List<string>();
         }
     }
 }

@@ -15,7 +15,6 @@ namespace ExtensionManager.Commands
         public override bool CanExecute(object parameter)
         {
             var s = parameter as ExtensionRowViewModel;
-
             return s?.Package != null && !s.IsInstalled;
         }
 
@@ -32,6 +31,13 @@ namespace ExtensionManager.Commands
                 {
                     PackageManager.InstallPackage(packageVm.Package, false, true);
                     packageVm.IsInstalled = true;
+
+                    if (!ViewModel.Settings.EnabledExtensions.Contains(packageVm.ExtensionId.ToString()))
+                    {
+                        ViewModel.Settings.EnabledExtensions.Add(packageVm.ExtensionId.ToString());
+
+                    }
+
                     ViewModel.InvokeSettingsChanged();
                     dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
                 }
