@@ -7,7 +7,7 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Inrule.Authoring.Extensions.RuleAppFlowAnalyzer")]
+[assembly: AssemblyTitle("InRule irAuthor Extension: Rule Application Flow Analyzer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("InRule")]
