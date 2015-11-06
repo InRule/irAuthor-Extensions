@@ -10,8 +10,8 @@
     <iconUrl>http://roadget.azurewebsites.net/inrule32.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <releaseNotes>First version of an irAuthor extension that helps authors visualize the flow of ruleset calls in a ruleapp.</releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>InRule irAuthor Extension RuleApp Flow Analyzer</tags>
+    <tags>InRule irAuthor Extension RuleApp Flow Visualizer</tags>
   </metadata>
 </package>
