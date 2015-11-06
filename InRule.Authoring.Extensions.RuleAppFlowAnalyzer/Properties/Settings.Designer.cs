@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InRule.Authoring.Extensions.RuleAppFlowAnalyzer.Properties {
+namespace InRule.Authoring.Extensions.RuleAppFlowVisualizer.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

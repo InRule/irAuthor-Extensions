@@ -5,7 +5,7 @@ using System.Text;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 
-namespace InRule.Authoring.Extensions.RuleAppFlowAnalyzer
+namespace InRule.Authoring.Extensions.RuleAppFlowVisualizer
 {
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     [ComVisible(true)]

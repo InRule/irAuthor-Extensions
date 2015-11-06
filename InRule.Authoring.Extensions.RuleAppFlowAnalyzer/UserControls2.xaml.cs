@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 
-namespace InRule.Authoring.Extensions.RuleAppFlowAnalyzer
+namespace InRule.Authoring.Extensions.RuleAppFlowVisualizer
 {
     /// <summary>
     /// Interaction logic for UserControl

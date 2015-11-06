@@ -35,7 +35,7 @@ using InRule.Repository.Templates;
 using InRule.Runtime;
 using InRule.RuleApplicationFramework;
 
-namespace InRule.Authoring.Extensions.RuleAppFlowAnalyzer
+namespace InRule.Authoring.Extensions.RuleAppFlowVisualizer
 {
     public class Extension : ExtensionBase
     {
@@ -98,13 +98,13 @@ namespace InRule.Authoring.Extensions.RuleAppFlowAnalyzer
                         string curDir = System.IO.Path.GetDirectoryName(RuleApplicationService.EditorAssembly.Location);
                         //File.WriteAllText(curDir + @"\FlowVisualizer_files\ruleapp_data.js", "var ruleapp_data = " + sw.ToString());
 
-                        //byte[] bytes = ReadBytesFromStream(InRule.Authoring.Extensions.RuleAppFlowAnalyzer.Properties.Resources.FlowVisualizer1);
+                        //byte[] bytes = ReadBytesFromStream(InRule.Authoring.Extensions.RuleAppFlowVisualizer.Properties.Resources.FlowVisualizer1);
                         //string s = GetResourceStream("FlowVisualizer1.htm");
                         //string s = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                         //Uri uri = new Uri(@"pack://application:,,,/StreamPage.htm");
                         //Stream source = Application.GetContentStream(uri).Stream;
 
-                        string s = InRule.Authoring.Extensions.RuleAppFlowAnalyzer.Properties.Resources.FlowVisualizer1;
+                        string s = InRule.Authoring.Extensions.RuleAppFlowVisualizer.Properties.Resources.FlowVisualizer1;
                         s = s.Replace("//\"ruleapp_data.js\"", "var ruleapp_data = " + sw.ToString()).Replace("###Root###", rulesetDef.Name);
 
                         var userControl2 = new UserControl2();
