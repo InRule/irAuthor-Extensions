@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://roadget.azurewebsites.net/InRuleEULA.txt</licenseUrl>
+    <projectUrl>http://roadget.azurewebsites.net/</projectUrl>
+    <iconUrl>http://roadget.azurewebsites.net/InRule</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The Extension Manager for IrAuthor allows users to browse, download, install, and update extensions from the irXchange feed provided by ROADGet</description>
+    <releaseNotes>Initial preview release</releaseNotes>
+    <copyright>Copyright 2015 InRule Technology</copyright>
+    <tags>extension</tags>
+  </metadata>
+</package>
