@@ -12,6 +12,8 @@ namespace ExtensionManager.ViewModels
 
         public IPackageMetadata PackageMetadata => Package as IPackageMetadata;
 
+        public string DisplayedVersion => Package.Version.Version.ToString(3);
+
         private bool updateAvailable;
         public bool UpdateAvailable
         {

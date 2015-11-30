@@ -9,7 +9,7 @@
         d:DataContext="{d:DesignInstance Type=viewModels:ExtensionBrowserViewModel, IsDesignTimeCreatable=True}"
         Title="Extension Browser" 
         Topmost="True" 
-        WindowStyle="ToolWindow" Width="768" >
+        WindowStyle="ToolWindow" Padding="4" Width="752" Margin="0">
     <Window.Resources>
         <Style TargetType="{x:Type Button}" x:Key="IsInstalledHideShowInverse">
             <Style.Triggers>
@@ -29,86 +29,71 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="105" />
-            <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.ColumnSpan="2"  VerticalAlignment="Center" Padding="2" Margin="0,0,0,4" BorderBrush="Black" BorderThickness="0,0,0,1" >
-            <StackPanel Orientation="Vertical" Height="101" >
-                 
-                    <Grid Height="38" Width="748">
-                        <Label  Content="Browse and Manage Extensions" FontSize="21" FontWeight="Bold"    />
-                        <Button Content="Refresh List" Click="refreshButton_Click" Padding="3" Margin="6" HorizontalAlignment="Right"     />
-                    </Grid>
-                 
-                <ProgressBar DataContext="{Binding DataContext, ElementName=dataGrid}" Height="25" Margin="6" Padding="6" IsIndeterminate="{Binding ShowProgress}" />
+            <StackPanel>
+                <Label DockPanel.Dock="Left" Content="Browse and Manage Extensions" FontSize="21" FontWeight="Bold" />
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Content="Refresh List" Click="refreshButton_Click" Padding="3" Margin="6" HorizontalAlignment="Right"     />
+                    <ProgressBar DockPanel.Dock="Bottom" DataContext="{Binding DataContext, ElementName=dataGrid}" Height="25" Margin="6" Padding="6" IsIndeterminate="{Binding ShowProgress}" />
+                </DockPanel>
             </StackPanel>
         </Border>
-        <DataGrid x:Name="dataGrid" MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False" 
-                  Grid.Row="1" Grid.Column="0" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
-                  CanUserResizeColumns="False" GridLinesVisibility="None" SelectionMode="Single" SelectedIndex="0" HeadersVisibility="None">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="viewModels:ExtensionRowViewModel">
-                            <Image Source="{Binding PackageMetadata.IconUrl}" Margin="7,5"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding PackageMetadata.Title, Mode=OneWay}" MinWidth="60"/>
-                <DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShowInverse}" />
-                                <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"  />
-                                <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShow}"   />
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <DockPanel Grid.Column="0" Grid.Row="1">
+            <DataGrid x:Name="dataGrid" MinHeight="150" ItemsSource="{Binding Extensions}" CanUserDeleteRows="False" AutoGenerateColumns="False" 
+        		CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
+        		CanUserResizeColumns="False" GridLinesVisibility="None" SelectionMode="Single" SelectedIndex="0" HeadersVisibility="None">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="45">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="viewModels:ExtensionRowViewModel">
+                                <Image Source="{Binding PackageMetadata.IconUrl}" Margin="7,5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding PackageMetadata.Title, Mode=OneWay}" Width="*"/>
+                    <!--<DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />-->
+                    <DataGridTemplateColumn Width=".5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="viewModels:ExtensionRowViewModel">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShowInverse}" />
+                                    <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"  />
+                                    <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShow}"   />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
         <StackPanel Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=dataGrid, Mode=OneWay}" Grid.Row="1"  >
             <Border VerticalAlignment="Center" Margin="4,7" BorderThickness="0,0,0,1" BorderBrush="Black" Padding="0,4,0,4">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="{Binding PackageMetadata.IconUrl}" Stretch="None" HorizontalAlignment="Left"  />
+                    <Image Source="{Binding PackageMetadata.IconUrl}" HorizontalAlignment="Left" Stretch="UniformToFill" Width="32" Height="32"  />
                     <Label Content="{Binding PackageMetadata.Title}" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold"     />
                 </StackPanel>
             </Border>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" d:DataContext="{d:DesignData viewModels:ExtensionRowViewModel}">
                     <Label Content="Description:" FontWeight="Bold"  />
-                    <Label Content="{Binding PackageMetadata.Description}" Margin="9,0,0,0" />
-                </StackPanel>
-                <StackPanel Grid.Row="1">
+                    <TextBlock Text="{Binding PackageMetadata.Description, Mode=OneWay}" TextWrapping="WrapWithOverflow" Margin="9,0,0,9"></TextBlock>
                     <Label Content="Author(s):" FontWeight="Bold"  />
                     <Label Content="{Binding PackageMetadata.Authors}" Margin="9,0,0,0"  />
-                </StackPanel>
-                <StackPanel Grid.Row="2" >
                     <Label Content="Tags:" FontWeight="Bold"  />
                     <Label Content="{Binding PackageMetadata.Tags}" Margin="9,0,0,0" />
-                </StackPanel>
-                <StackPanel Grid.Row="3">
                     <Label Content="Version" FontWeight="Bold"  />
-                    <Label Content="{Binding PackageMetadata.Version}" Margin="9,0,0,0" />
+                    <Label Content="{Binding DisplayedVersion}" Margin="9,0,0,0" />
                     <Label Content="Release Date" FontWeight="Bold"  />
                     <Label Content="{Binding Package.Published.Date, Mode=OneWay, StringFormat=\{0:d\}}" Margin="9,0,0,0" />
                 </StackPanel>
-
-            </Grid>
+            </DockPanel>
 
         </StackPanel>
 
