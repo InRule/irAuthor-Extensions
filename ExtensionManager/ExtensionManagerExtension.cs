@@ -14,7 +14,7 @@ using InRule.Authoring.Services;
 
 namespace ExtensionManager
 {
-    public class ExtensionManagerExtension : ExtensionBase
+    public sealed class ExtensionManagerExtension : ExtensionBase
     {
         [ImportMany]
         private IEnumerable<IExtension> extensions; 
@@ -27,7 +27,7 @@ namespace ExtensionManager
                   guid: new Guid("{A948BB74-0A66-4C71-858D-0225C0D17AAB}"), 
                   isSystemExtension: true)
         {
-            Priority = 100000000; //ensures that the extension loads after other system extensions so that it can be the furthest element to the right.
+            Priority = 100000000; // HACK: ensures that the extension loads after other system extensions so that it can be the furthest element to the right.
         }
 
         public override void Enable()
