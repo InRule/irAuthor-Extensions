@@ -146,7 +146,7 @@ namespace ExtensionManager.ViewModels
                             IsInstalled = currentPackage != null,
                             LatestVersion = packageVersion.ToNormalizedString(),
                             InstalledVersion = currentPackage == null ? "--" : currentPackage.Version.ToNormalizedString(),
-                            Package = currentPackage
+                            Package = packs.First(p => p.Id == id)
                         };
                     })
                     .ToList()

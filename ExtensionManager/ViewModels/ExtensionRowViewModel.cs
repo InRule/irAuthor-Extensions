@@ -14,8 +14,6 @@ namespace ExtensionManager.ViewModels
 
         public IPackageMetadata PackageMetadata => Package as IPackageMetadata;
 
-        public string DisplayedVersion => Package.Version.Version.ToString(3);
-
         private bool updateAvailable;
         public bool UpdateAvailable
         {
@@ -35,11 +33,10 @@ namespace ExtensionManager.ViewModels
             get { return isInstalled; }
             set
             {
-                if (isInstalled != value)
-                {
-                    isInstalled = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsInstalled"));
-                }
+                if (isInstalled == value) return;
+
+                isInstalled = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsInstalled"));
             }
         }
 
@@ -58,7 +55,18 @@ namespace ExtensionManager.ViewModels
             }
         }
 
-        public string InstalledVersion { get; set; }
+        private string installedVersion;
+        public string InstalledVersion
+        {
+            get { return installedVersion; }
+            set
+            {
+                if (value == installedVersion) return;
+
+                installedVersion = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InstalledVersion"));
+            }
+        }
 
         public string LatestVersion { get; set; }
 
