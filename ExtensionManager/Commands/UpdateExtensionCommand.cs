@@ -22,7 +22,7 @@ namespace ExtensionManager.Commands
         public override bool CanExecute(object parameter)
         {
             var s = parameter as ExtensionRowViewModel;
-            var canExecute = s != null && s.UpdateAvailable && s.AllVersions.Count() > 1;
+            var canExecute = s != null && s.UpdateAvailable;
             
             return canExecute;
         }
@@ -40,7 +40,8 @@ namespace ExtensionManager.Commands
             {
                 try
                 {
-                    PackageManager.UpdatePackage(rowModel.Package.Id, false, true);  
+                    PackageManager.UpdatePackage(rowModel.Package.Id, false, true);
+                    rowModel.UpdateAvailable = false;
                     dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
                 }
                 catch (Exception ex)

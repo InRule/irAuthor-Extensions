@@ -19,7 +19,14 @@ namespace ExtensionManager.ViewModels
         private bool updateAvailable;
         public bool UpdateAvailable
         {
-            get { return IsInstalled && InstalledVersion != DisplayedVersion; }
+            get { return updateAvailable; }
+            set
+            {
+                if (updateAvailable == value) return;
+
+                updateAvailable = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateAvailable"));
+            }
         }
 
         private bool isInstalled;
@@ -51,9 +58,9 @@ namespace ExtensionManager.ViewModels
             }
         }
 
-        public IEnumerable<IPackage> AllVersions { get; set; }
-
         public string InstalledVersion { get; set; }
+
+        public string LatestVersion { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
