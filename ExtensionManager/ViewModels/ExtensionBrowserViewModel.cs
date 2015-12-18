@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -51,7 +53,6 @@ namespace ExtensionManager.ViewModels
         public IEnumerable<IExtension> InstalledExtensions { get; set; } 
         public readonly PackageManager PackageManager;
 
-        private const string RoadGetFeedUrl = "http://roadget.azurewebsites.net/nuget"; // TODO: move this into a runtime-configurable setting
         private readonly string ExtensionsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"InRule\irAuthor\ExtensionExchange");
         private readonly IPackageRepository repository;
 
@@ -63,9 +64,10 @@ namespace ExtensionManager.ViewModels
         public ExtensionBrowserViewModel(ExtensionManagerSettings settings)
         {
             Settings = settings;
+
             Extensions = new ObservableCollection<ExtensionRowViewModel>();
             InstalledExtensions = new List<IExtension>();
-            repository = PackageRepositoryFactory.Default.CreateRepository(RoadGetFeedUrl);
+            repository = PackageRepositoryFactory.Default.CreateRepository(Settings.FeedUrl);
             PackageManager = new PackageManager(repository, ExtensionsDirectory)
             {
                 Logger = new DebugLogger()
@@ -118,7 +120,7 @@ namespace ExtensionManager.ViewModels
             Application.Current.Shutdown();
         }
 
-        public void RefreshPackageList()
+        public void RefreshPackageList(bool showInstalledOnly = false)
         {
             var dispatcher = Dispatcher.CurrentDispatcher;
             RaiseWorkStarted();
@@ -130,14 +132,18 @@ namespace ExtensionManager.ViewModels
                 var packages = repository.GetPackages()
                     .Where(x => x.Tags.Contains("extension"))
                     .ToList()
-                    .Select(x => new ExtensionRowViewModel
+                    .GroupBy(x => x.Id, (id,packs) => new ExtensionRowViewModel
                     {
-                        IsInstalled = PackageManager.LocalRepository.Exists(x.Id),
-                        UpdateAvailable = PackageManager.LocalRepository.Exists(x.Id) && !x.IsLatestVersion,
-                        Package = x
+                        InstalledVersion = PackageManager.LocalRepository.FindPackage(id)?.Version.Version.ToString(3),
+                        IsInstalled = PackageManager.LocalRepository.Exists(id),
+                        Package = packs.First(y => y.IsAbsoluteLatestVersion),
+                        AllVersions = repository.GetUpdates(packs, true, true, null, null)
+                            .Distinct()
+                            .OrderByDescending(r => r.IsLatestVersion)
+
                     })
                     .ToList()
-                    .Where(x => x.Package.IsLatestVersion);
+                    .Where(x => !showInstalledOnly || x.IsInstalled);
                 Debug.WriteLine("Got packages. Invoking action on dispatcher to populate UI");
                 dispatcher.BeginInvoke(new Action(() => { Extensions.Clear(); Extensions.AddRange(packages);}));
 
