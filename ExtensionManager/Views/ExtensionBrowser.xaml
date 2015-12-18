@@ -25,6 +25,13 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type Button}" x:Key="IsUpgradeAvailable">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding UpgradeAvailable, Mode=OneWay}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
@@ -59,13 +66,13 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Binding="{Binding PackageMetadata.Title, Mode=OneWay}" Width="*"/>
                     <!--<DataGridTextColumn Binding="{Binding PackageMetadata.Version, Mode=OneWay}" Header="Version" />-->
-                    <DataGridTemplateColumn Width=".5*">
+                    <DataGridTemplateColumn Width=".75*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="viewModels:ExtensionRowViewModel">
                                 <StackPanel Orientation="Horizontal">
                                     <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShowInverse}" />
-                                    <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"  />
-                                    <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShow}"   />
+                                    <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsUpgradeAvailable }"  />
+                                    <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShow}"  />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -81,14 +88,16 @@
                 </StackPanel>
             </Border>
             <DockPanel>
-                <StackPanel DockPanel.Dock="Top" d:DataContext="{d:DesignData viewModels:ExtensionRowViewModel}">
+                <StackPanel DockPanel.Dock="Top" >
                     <Label Content="Description:" FontWeight="Bold"  />
                     <TextBlock Text="{Binding PackageMetadata.Description, Mode=OneWay}" TextWrapping="WrapWithOverflow" Margin="9,0,0,9"></TextBlock>
                     <Label Content="Author(s):" FontWeight="Bold"  />
                     <Label Content="{Binding PackageMetadata.Authors}" Margin="9,0,0,0"  />
                     <Label Content="Tags:" FontWeight="Bold"  />
                     <Label Content="{Binding PackageMetadata.Tags}" Margin="9,0,0,0" />
-                    <Label Content="Version" FontWeight="Bold"  />
+                    <Label Content="Installed Version" FontWeight="Bold"  />
+                    <Label Content="{Binding InstalledVersion}" Margin="9,0,0,0" />
+                    <Label Content="Latest Version" FontWeight="Bold"  />
                     <Label Content="{Binding DisplayedVersion}" Margin="9,0,0,0" />
                     <Label Content="Release Date" FontWeight="Bold"  />
                     <Label Content="{Binding Package.Published.Date, Mode=OneWay, StringFormat=\{0:d\}}" Margin="9,0,0,0" />
