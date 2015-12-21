@@ -13,22 +13,22 @@
     <Window.Resources>
         <Style TargetType="{x:Type Button}" x:Key="IsInstalledHideShowInverse">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding (viewModels:ExtensionRowViewModel.IsInstalled)}" Value="True">
-                    <Setter Property="Visibility" Value="Hidden" />
+                <DataTrigger Binding="{Binding IsInstalled, Mode=OneWay}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type Button}" x:Key="IsInstalledHideShow">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding (viewModels:ExtensionRowViewModel.IsInstalled)}" Value="False">
-                    <Setter Property="Visibility" Value="Hidden" />
+                <DataTrigger Binding="{Binding IsInstalled, Mode=OneWay}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type Button}" x:Key="IsUpgradeAvailable">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding (viewModels:ExtensionRowViewModel.UpdateAvailable)}" Value="False">
-                    <Setter Property="Visibility" Value="Hidden" />
+                <DataTrigger Binding="{Binding UpdateAvailable, Mode=OneWay}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -70,9 +70,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="viewModels:ExtensionRowViewModel">
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}"  Style="{DynamicResource IsInstalledHideShowInverse}" />
-                                    <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsUpgradeAvailable }"  />
-                                    <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShow}"  />
+                                    <Button Command="{Binding DataContext.AddExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShowInverse}" />
+                                    <Button Command="{Binding DataContext.UpdateExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsUpgradeAvailable }"  />
+                                    <Button Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Content="Remove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="3" CommandParameter="{Binding DataContext, Mode=OneWay, RelativeSource={RelativeSource Self}}" Style="{DynamicResource IsInstalledHideShow}"  />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
