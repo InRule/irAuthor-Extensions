@@ -1,4 +1,4 @@
-# irAuthor-Extensions
+# irAuthor Extensions
 A collection of unsupported irAuthor extensions.
 
 |Project|Description|
