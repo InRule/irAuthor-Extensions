@@ -3,6 +3,6 @@ A collection of unsupported irAuthor extensions. Most are "user" extensions (as 
 
 All extension projects reference the InRule SDK in `%programfiles%\InRule`, so it should simply be a matter of downloading and compiling.
 
-|Project|Description|
+|Extension|Description|
 |---|---|
 |[RefreshTemplateEngine](RefreshTemplateEngine)|Adds a ribbon button to refresh the template engine
