@@ -1,0 +1,26 @@
+﻿<Window x:Class="InRule.Authoring.Extensions.Commander.CommanderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" ShowInTaskbar="False"
+        Title="CommanderWindow" SizeToContent="Height" Width="334" MaxHeight="500" WindowStartupLocation="CenterOwner"
+        FocusManager.FocusedElement="{Binding ElementName=textBox}" WindowStyle="None">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <TextBox Name="textBox" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Margin="5 0" />
+        
+        <ListBox Grid.Row="1" Margin="0,5,0,0" Name="listBox" MouseDoubleClick="WhenListBoxDoubleClicked">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<DockPanel>
+						<Image Source="{Binding Command.ImageSourceSmall}" Height="16" Width="16" DockPanel.Dock="Left"/>
+						<TextBlock Margin="5 0 0 0" Text="{Binding DisplayName}" />
+					</DockPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+            
+    </Grid>
+</Window>
