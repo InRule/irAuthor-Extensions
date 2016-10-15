@@ -5,4 +5,5 @@ All extension projects reference the InRule SDK in `%programfiles%\InRule`, so i
 
 |Extension|Description|
 |---|---|
+|[Commander](Commander)|Allows the user to access and execute any command for the currently selected item via the keyboard
 |[RefreshTemplateEngine](RefreshTemplateEngine)|Adds a ribbon button to refresh the template engine
