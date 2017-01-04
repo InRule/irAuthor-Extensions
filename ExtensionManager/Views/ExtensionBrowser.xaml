@@ -8,7 +8,6 @@
         ShowInTaskbar="False"
         d:DataContext="{d:DesignInstance Type=viewModels:ExtensionBrowserViewModel, IsDesignTimeCreatable=True}"
         Title="Extension Browser" 
-        Topmost="True" 
         WindowStyle="ToolWindow" Padding="4" Width="752" Margin="0">
     <Window.Resources>
         <Style TargetType="{x:Type Button}" x:Key="IsInstalledHideShowInverse">

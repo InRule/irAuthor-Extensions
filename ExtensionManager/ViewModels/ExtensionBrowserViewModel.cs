@@ -54,7 +54,7 @@ namespace ExtensionManager.ViewModels
         public readonly PackageManager PackageManager;
 
         private readonly string ExtensionsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"InRule\irAuthor\ExtensionExchange");
-        private readonly IPackageRepository repository;
+        private readonly AggregateRepository repository;
 
         internal readonly ExtensionManagerSettings Settings;
         private int operationProgress = 0;
@@ -69,13 +69,18 @@ namespace ExtensionManager.ViewModels
             InstalledExtensions = new List<IExtension>();
 
             repository = new AggregateRepository(PackageRepositoryFactory.Default, new[] {
-                "http://roadget.azurewebsites.net/nuget/", "https://api.nuget.org/v3/index.json" }, true);            
+                "http://roadget.azurewebsites.net/nuget/",
+                "https://www.nuget.org/api/v2/curated-feeds/microsoftdotnet/",
+                "https://api.nuget.org/v3/index.json",
+                }, true);
 
+            repository.ResolveDependenciesVertically = true;
             PackageManager = new PackageManager(repository, ExtensionsDirectory)
             {
                 Logger = new DebugLogger()
             };
             PackageManager.FileSystem.Logger = PackageManager.Logger;
+            repository.Logger = PackageManager.Logger;
 
             var addExt = new AddExtensionCommand(ExtensionsDirectory, repository, this);
             AddExtensionCommand = addExt;
