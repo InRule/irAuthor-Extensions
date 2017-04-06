@@ -1,0 +1,14 @@
+﻿<Window x:Class="irXFindUnusedSchema.DisplayForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:irXFindUnusedSchema"
+             mc:Ignorable="d" 
+             d:DesignHeight="371.863" d:DesignWidth="476.806">
+    <Grid>
+        <Button x:Name="CloseItButton" Content="Close" HorizontalAlignment="Left" Margin="384,311,0,0" VerticalAlignment="Top" Width="75" Click="CloseItButton_Click" />
+        <TextBox x:Name="TheTextBox" HorizontalAlignment="Left" Height="296" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" />
+
+    </Grid>
+</Window>
