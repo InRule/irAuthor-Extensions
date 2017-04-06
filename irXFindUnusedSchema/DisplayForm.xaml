@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:irXFindUnusedSchema"
              mc:Ignorable="d" 
-             d:DesignHeight="371.863" d:DesignWidth="476.806">
+             d:DesignHeight="344.863" d:DesignWidth="511.806">
     <Grid>
-        <Button x:Name="CloseItButton" Content="Close" HorizontalAlignment="Left" Margin="384,311,0,0" VerticalAlignment="Top" Width="75" Click="CloseItButton_Click" />
-        <TextBox x:Name="TheTextBox" HorizontalAlignment="Left" Height="296" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" />
 
+        <TextBox x:Name="TheTextBox" Margin="10,10,10,35" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" />
+        <Button x:Name="CloseItButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="CloseItButton_Click" />
     </Grid>
 </Window>
