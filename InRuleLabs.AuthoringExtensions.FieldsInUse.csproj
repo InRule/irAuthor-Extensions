@@ -66,7 +66,19 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BooleanToHiddenConverter.cs" />
+    <Compile Include="Controls\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Controls\DoubleToGridLengthConverter.cs" />
+    <Compile Include="Controls\HighlightedTextBlock.cs" />
+    <Compile Include="Controls\IrGridSplitter.cs" />
+    <Compile Include="Controls\IrSeparator.cs" />
+    <Compile Include="Controls\WaitSpinner.xaml.cs">
+      <DependentUpon>WaitSpinner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FieldsInUseExtension.cs" />
+    <Compile Include="Extensions\DispatcherExtensions.cs" />
+    <Compile Include="Extensions\ThreadExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -75,8 +87,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\FieldUsageSummary.xaml.cs">
-      <DependentUpon>FieldUsageSummary.xaml</DependentUpon>
+    <Compile Include="Views\ListViewSortManager.cs" />
+    <Compile Include="Views\FieldDefListView.xaml.cs">
+      <DependentUpon>FieldDefListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageUnusedFieldsDialog.xaml.cs">
+      <DependentUpon>ManageUnusedFieldsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TextPopupWindow.xaml.cs">
+      <DependentUpon>TextPopupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\DefUsageExtensions.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -87,7 +106,27 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\FieldUsageSummary.xaml">
+    <Page Include="Controls\WaitSpinner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\InRuleShared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ExtensionStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FieldDefListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ManageUnusedFieldsDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TextPopupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
