@@ -4,12 +4,6 @@
 * Tested against version 4.6.27 of IrAuthor
 * Earlier versions have not been tested but and v > 4.6 should work
 
-##Installation
-1. Make sure IrAuthor is not open
-2. Unzip the files in UndoExtension.zip into your IrAuthor\Extensions folder (default location is C:\Program Files (x86)\InRule\irAuthor\Extensions\)
-3. Open IrAuthor, then select **Extensions** from the **File** menu
-4. Check the box next to **UndoExtension** to enable it.
-
 ##Usage notes
 Adds support for undo/redo of delete and insert operations within irAuthor. If there are actions that can be undone/redone, the appropriate button will enable itself.
 
