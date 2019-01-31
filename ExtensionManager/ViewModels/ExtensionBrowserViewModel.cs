@@ -54,7 +54,7 @@ namespace ExtensionManager.ViewModels
         public readonly PackageManager PackageManager;
 
         private readonly string ExtensionsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"InRule\irAuthor\ExtensionExchange");
-        private readonly DataServicePackageRepository repository;
+        private readonly AggregateRepository repository;
 
         internal readonly ExtensionManagerSettings Settings;
         private int operationProgress = 0;
@@ -68,14 +68,19 @@ namespace ExtensionManager.ViewModels
             Extensions = new ObservableCollection<ExtensionRowViewModel>();
             InstalledExtensions = new List<IExtension>();
 
-            repository = PackageRepositoryFactory.Default.CreateRepository(Settings.FeedUrl) as DataServicePackageRepository;
-            Debug.Assert(repository != null, "IRepository should be assignable to DataServicePackageRepository");
+            repository = new AggregateRepository(PackageRepositoryFactory.Default, new[] {
+                "http://roadget.azurewebsites.net/nuget/",
+                "https://www.nuget.org/api/v2/curated-feeds/microsoftdotnet/",
+                "https://api.nuget.org/v3/index.json",
+                }, true);
 
+            repository.ResolveDependenciesVertically = true;
             PackageManager = new PackageManager(repository, ExtensionsDirectory)
             {
                 Logger = new DebugLogger()
             };
             PackageManager.FileSystem.Logger = PackageManager.Logger;
+            repository.Logger = PackageManager.Logger;
 
             var addExt = new AddExtensionCommand(ExtensionsDirectory, repository, this);
             AddExtensionCommand = addExt;
@@ -137,15 +142,15 @@ namespace ExtensionManager.ViewModels
                     .ToList()
                     .GroupBy(x => x.Id, (id, packs) =>
                     {
-                        SemanticVersion packageVersion;
+                        SemanticVersion latestVersion;
+                        latestVersion = packs.Max(v => v.Version);
                         IPackage currentPackage = PackageManager.LocalRepository.FindPackage(id);
-                        repository.TryFindLatestPackageById(id, out packageVersion);
                         return new ExtensionRowViewModel
                         {
-                            UpdateAvailable = currentPackage != null && currentPackage.Version < packageVersion,
+                            UpdateAvailable = currentPackage != null && !currentPackage.IsLatestVersion,
                             IsInstalled = currentPackage != null,
-                            LatestVersion = packageVersion.ToNormalizedString(),
-                            InstalledVersion = currentPackage == null ? "--" : currentPackage.Version.ToNormalizedString(),
+                            LatestVersion = latestVersion.ToNormalizedString(),
+                            InstalledVersion = currentPackage == null ? "--" : currentPackage.Version.ToNormalizedString(),                            
                             Package = packs.First(p => p.Id == id)
                         };
                     })
