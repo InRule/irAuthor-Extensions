@@ -19,12 +19,12 @@ All extension projects reference the InRule SDK in `%programfiles%\InRule`, so i
 |[TitleVersion](TitleVersion)|Adds the current version of irAuthor to the title bar of the application
 |[UndoExtension](UndoExtension)|Enhances the Undo functionality of irAuthor
 
-##Build
+## Build
 1. Retrieve a copy of the source for the extension you're interested in (either via cloning or downloading an archive of the appropriate folder)
 2. Open the solution for the extension, and Restore Nuget Packages, making sure that you have your irSDK files configured as an available NuGet source.  Alternatively, add new references for your local irSDK InRule assemblies.
 3. Build the solution
 
-##Installation
+## Installation
 1. Make sure IrAuthor is not open
 2. Create a subfolder in your Extensions folder for the new extension (default location is C:\Program Files (x86)\InRule\irAuthor\Extensions\)
 3. Copy the build extension from your build directory into the new directory, making sure NOT to include any of the InRule.* or ActiproSoftware.* assemblies

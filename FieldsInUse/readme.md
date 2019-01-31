@@ -1,8 +1,8 @@
 # Fields in Use for IrAuthor
 
-##Requirements
+## Requirements
 
-##Usage notes
+## Usage notes
 Adds a rich interface with information pertaining to the usage of entity fields throughout the Rule Application
 
-##Version History
+## Version History

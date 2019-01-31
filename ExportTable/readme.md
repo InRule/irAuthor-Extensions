@@ -1,8 +1,8 @@
 # Export Table for IrAuthor
 
-##Requirements
+## Requirements
 
-##Usage notes
+## Usage notes
 Exports Inline Tables
 
-##Version History
+## Version History

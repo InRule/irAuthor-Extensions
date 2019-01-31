@@ -10,4 +10,4 @@ Yo dawg! I heard you like extensions, so I made an extension to manage your exte
 Installing the Extension Manager is simple. Just extract the ZIP file containing the ExtensionManager assembly and its' dependencies into the appropriate folder of your IrAuthor installation.
 Typically, this is located at `%USERDATA%\Local\InRule\irAuthor\ExtensionExchange` (you may need to create the last directory in the path).
 
-##Version History
+## Version History

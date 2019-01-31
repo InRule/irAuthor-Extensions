@@ -1,8 +1,8 @@
 # Decision Table Exporter for IrAuthor
 
-##Requirements
+## Requirements
 
-##Usage notes
+## Usage notes
 Exports Decision Tables into a .csv file
 
-##Version History
+## Version History

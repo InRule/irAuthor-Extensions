@@ -1,8 +1,8 @@
 # Rule Flow Visualizer for IrAuthor
 
-##Requirements
+## Requirements
 
-##Usage notes
+## Usage notes
 Visualize Rule Flows
 
-##Version History
+## Version History

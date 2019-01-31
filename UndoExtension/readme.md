@@ -1,13 +1,13 @@
 # Undo extension for irAuthor
 
-##Requirements
+## Requirements
 * Tested against version 4.6.27 of IrAuthor
 * Earlier versions have not been tested but and v > 4.6 should work
 
-##Usage notes
+## Usage notes
 Adds support for undo/redo of delete and insert operations within irAuthor. If there are actions that can be undone/redone, the appropriate button will enable itself.
 
-##Version History
+## Version History
 
 ### v0.0.1 (15-Oct-2015)
 * (modification) default buffer size is now set to 5
