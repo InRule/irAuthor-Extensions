@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B48B6D78-FC3E-4163-A7F9-DC6D52DA0519}</ProjectGuid>
+    <ProjectGuid>{9A27C872-8924-4E6B-B215-155C065457C3}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InRule.Authoring.Extensions.NavigationToolWindows</RootNamespace>
-    <AssemblyName>InRule.Authoring.Extensions.NavigationToolWindows</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>InRule.Authoring.Extensions.Commander</RootNamespace>
+    <AssemblyName>InRule.Authoring.Extensions.Commander</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -41,17 +41,36 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InRule.Authoring">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\InRule\irSDK\bin\InRule.Authoring.dll</HintPath>
+    <Reference Include="InRule.Authoring, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Authoring.Core.Navigation">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\InRule\irAuthor\Extensions\InRule.Authoring.Core.Navigation.dll</HintPath>
+    <Reference Include="InRule.Authoring.Editors, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Editors.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Authoring.Windows">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\InRule\irSDK\bin\InRule.Authoring.Windows.dll</HintPath>
+    <Reference Include="InRule.Authoring.Windows, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="InRule.Common, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Common.5.2.0\lib\net461\InRule.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="InRule.Repository, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="InRule.Repository.XmlSerializers, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="InRule.Runtime, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Runtime.5.2.0\lib\net461\InRule.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -60,21 +79,17 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ToolWindowHost.xaml.cs">
-      <DependentUpon>ToolWindowHost.xaml</DependentUpon>
+    <Compile Include="CommanderWindow.xaml.cs">
+      <DependentUpon>CommanderWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CommandListItem.cs" />
     <Compile Include="Extension.cs" />
-    <Page Include="ToolWindowHost.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,6 +107,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -100,13 +117,15 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="docs\" />
+    <Page Include="CommanderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="docs\Commander.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

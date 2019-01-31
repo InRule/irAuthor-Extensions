@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E26825C9-F8E0-43A8-AC28-AC7929DC8521}</ProjectGuid>
+    <ProjectGuid>{61796E87-E095-49B2-9284-361DEEB1644B}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InRuleLabs.AuthoringExtensions.FieldsInUse</RootNamespace>
     <AssemblyName>InRuleLabs.AuthoringExtensions.FieldsInUse</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -33,25 +33,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InRule.Authoring">
-      <HintPath>..\..\Program Files (x86)\InRule\irAuthor\InRule.Authoring.dll</HintPath>
+    <Reference Include="InRule.Authoring, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Authoring.Windows">
-      <HintPath>..\..\Program Files (x86)\InRule\irAuthor\InRule.Authoring.Windows.dll</HintPath>
+    <Reference Include="InRule.Authoring.Editors, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Editors.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Common">
-      <HintPath>..\..\Program Files (x86)\InRule\irAuthor\InRule.Common.dll</HintPath>
+    <Reference Include="InRule.Authoring.Windows, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Repository">
-      <HintPath>..\..\Program Files (x86)\InRule\irAuthor\InRule.Repository.dll</HintPath>
+    <Reference Include="InRule.Common, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Common.5.2.0\lib\net461\InRule.Common.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Runtime">
-      <HintPath>..\..\Program Files (x86)\InRule\irAuthor\InRule.Runtime.dll</HintPath>
+    <Reference Include="InRule.Repository, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.dll</HintPath>
     </Reference>
-    <Reference Include="InRule.Runtime.Testing">
-      <HintPath>..\..\Program Files (x86)\InRule\irAuthor\InRule.Runtime.Testing.dll</HintPath>
+    <Reference Include="InRule.Repository.XmlSerializers, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="InRule.Runtime, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
+      <HintPath>..\packages\InRule.Runtime.5.2.0\lib\net461\InRule.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
@@ -104,6 +114,7 @@
     </EmbeddedResource>
     <None Include="App.Config" />
     <AppDesigner Include="Properties\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\WaitSpinner.xaml">
@@ -139,13 +150,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF EXIST "C:\Program Files (x86)\InRule\irAuthor\Extensions\Fields In Use" GOTO HAVEDIR
-MD "C:\Program Files (x86)\InRule\irAuthor\Extensions\Fields In Use"
-   :HAVEDIR
-xcopy /Q /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\InRule\irAuthor\Extensions\Fields In Use"
-
-
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

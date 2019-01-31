@@ -2,8 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using InRule.Authoring.Core.Navigation;
 using InRule.Authoring.Windows;
+using InRule.Authoring.Core.Navigation;
 
 namespace InRule.Authoring.Extensions.NavigationToolWindows
 {
