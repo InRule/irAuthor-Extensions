@@ -41,44 +41,43 @@
       <HintPath>..\packages\DocumentFormat.OpenXml.2.9.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="InRule.Authoring, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.dll</HintPath>
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Editors, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Editors.dll</HintPath>
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Editors.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Windows, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Windows.dll</HintPath>
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Windows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Common, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Common.5.2.0\lib\net461\InRule.Common.dll</HintPath>
+      <HintPath>..\packages\InRule.Common.5.2.0\lib\net461\InRule.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Repository, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.dll</HintPath>
+      <HintPath>..\packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Repository.XmlSerializers, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.XmlSerializers.dll</HintPath>
+      <HintPath>..\packages\InRule.Repository.5.2.0\lib\net461\InRule.Repository.XmlSerializers.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Runtime, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
-      <HintPath>packages\InRule.Runtime.5.2.0\lib\net461\InRule.Runtime.dll</HintPath>
+      <HintPath>..\packages\InRule.Runtime.5.2.0\lib\net461\InRule.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-      <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.Packaging, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
