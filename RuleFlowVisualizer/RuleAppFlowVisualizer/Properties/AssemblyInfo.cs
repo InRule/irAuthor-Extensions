@@ -11,8 +11,8 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("InRule")]
-[assembly: AssemblyProduct("Inrule.Authoring.Extensions.RuleAppFlowVisualizer")]
-[assembly: AssemblyCopyright("Copyright © InRule 2015")]
+[assembly: AssemblyProduct("RuleAppFlowVisualizer")]
+[assembly: AssemblyCopyright("Copyright © InRule 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

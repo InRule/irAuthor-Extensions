@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecisionTableImporter", "DecisionTableImporter\DecisionTableImporter.csproj", "{A28E283B-073D-422E-B7B1-5A5BC25BE17C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavigationToolWindows", "NavigationToolWindows\NavigationToolWindows.csproj", "{B48B6D78-FC3E-4163-A7F9-DC6D52DA0519}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A28E283B-073D-422E-B7B1-5A5BC25BE17C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A28E283B-073D-422E-B7B1-5A5BC25BE17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A28E283B-073D-422E-B7B1-5A5BC25BE17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A28E283B-073D-422E-B7B1-5A5BC25BE17C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B48B6D78-FC3E-4163-A7F9-DC6D52DA0519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48B6D78-FC3E-4163-A7F9-DC6D52DA0519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B48B6D78-FC3E-4163-A7F9-DC6D52DA0519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B48B6D78-FC3E-4163-A7F9-DC6D52DA0519}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B9A4020A-8043-467F-AD1C-D1FF0D91C97D}
+		SolutionGuid = {3636D21B-B6C4-4B88-A8DC-AEAFF8246D3D}
 	EndGlobalSection
 EndGlobal
