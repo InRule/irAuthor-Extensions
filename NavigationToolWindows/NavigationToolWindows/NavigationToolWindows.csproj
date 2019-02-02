@@ -90,7 +90,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Core.Navigation">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\InRule\irAuthor\Extensions\InRule.Authoring.Core.Navigation.dll</HintPath>
+      <HintPath>..\packages\InRule.Authoring.Core.5.2.0\lib\net461\InRule.Authoring.Core.Navigation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Editors, Version=5.2.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">

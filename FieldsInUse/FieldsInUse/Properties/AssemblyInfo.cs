@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("InRuleLabs.AuthoringExtensions.FieldsInUse")]
 [assembly: AssemblyDescription("Find fields in use")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("InRule Technology, Inc.")]
 [assembly: AssemblyProduct("InRuleLabs.AuthoringExtensions.FieldsInUse")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

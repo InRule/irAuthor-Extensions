@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("DecisionTableImporter")]
 [assembly: AssemblyDescription("Import a Decision Table from an Excel spreadsheet")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("InRule Technology, Inc.")]
 [assembly: AssemblyProduct("DecisionTableImporter")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © 2019 InRule Technology, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

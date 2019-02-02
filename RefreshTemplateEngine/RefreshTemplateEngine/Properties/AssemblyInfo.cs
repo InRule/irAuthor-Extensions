@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("InRule.Authoring.Extensions.RefreshTemplateEngine")]
 [assembly: AssemblyDescription("Refresh the BL template engine")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("InRule Technology, Inc.")]
 [assembly: AssemblyProduct("InRule.Authoring.Extensions.RefreshTemplateEngine")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © InRule Technology, Inc. 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
