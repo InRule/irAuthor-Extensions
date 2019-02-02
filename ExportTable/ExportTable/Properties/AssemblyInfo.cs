@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("InRule.Authoring.Extensions.ExportTable")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Export inline tables to CSV")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("InRule.Authoring.Extensions.ExportTable")]

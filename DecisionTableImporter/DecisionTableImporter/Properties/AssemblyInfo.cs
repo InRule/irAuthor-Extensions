@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DecisionTableImporter")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Import a Decision Table from an Excel spreadsheet")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DecisionTableImporter")]

@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("InRule irAuthor Extension: Rule Application Flow Visualizer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Visualize rule execution")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("InRule")]
 [assembly: AssemblyProduct("RuleAppFlowVisualizer")]

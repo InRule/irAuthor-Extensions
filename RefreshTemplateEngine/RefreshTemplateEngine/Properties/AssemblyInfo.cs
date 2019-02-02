@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("InRule.Authoring.Extensions.RefreshTemplateEngine")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Refresh the BL template engine")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("InRule.Authoring.Extensions.RefreshTemplateEngine")]

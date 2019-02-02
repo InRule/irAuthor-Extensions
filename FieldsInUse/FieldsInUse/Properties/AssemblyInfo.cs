@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("InRuleLabs.AuthoringExtensions.FieldsInUse")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Find fields in use")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("InRuleLabs.AuthoringExtensions.FieldsInUse")]

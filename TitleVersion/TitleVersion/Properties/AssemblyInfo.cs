@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Title Version for irAuthor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Display the version of irAuthor in the title bar")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("InRule Technology")]
 [assembly: AssemblyProduct("TitleVersion")]
