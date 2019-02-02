@@ -11,7 +11,7 @@
     <iconUrl>http://roadget.azurewebsites.net/inrule32.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>v0.0.1
+    <releaseNotes>v0.0.1</releaseNotes>
     <copyright>Copyright 2019 InRule Technology</copyright>
     <tags>irauthor extension decision table import ROAD</tags>
   </metadata>
