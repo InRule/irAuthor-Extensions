@@ -70,11 +70,13 @@ namespace ExtensionManager.ViewModels
 
             repository = new AggregateRepository(PackageRepositoryFactory.Default, new[] {
                 "http://roadget.azurewebsites.net/nuget/",
-                "https://www.nuget.org/api/v2/curated-feeds/microsoftdotnet/",
                 "https://api.nuget.org/v3/index.json",
-                }, true);
-
-            repository.ResolveDependenciesVertically = true;
+                }, true)
+            {
+                ResolveDependenciesVertically = true,
+                IgnoreFailingRepositories = true,
+                
+            };
             PackageManager = new PackageManager(repository, ExtensionsDirectory)
             {
                 Logger = new DebugLogger()
