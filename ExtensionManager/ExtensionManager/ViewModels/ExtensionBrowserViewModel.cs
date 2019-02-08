@@ -67,9 +67,10 @@ namespace ExtensionManager.ViewModels
 
             Extensions = new ObservableCollection<ExtensionRowViewModel>();
             InstalledExtensions = new List<IExtension>();
-
+            
             repository = new AggregateRepository(PackageRepositoryFactory.Default, new[] {
-                "http://roadget.azurewebsites.net/nuget/",
+                Settings.FeedUrl,
+                "https://www.nuget.org/api/v2/curated-feeds/microsoftdotnet/",
                 "https://api.nuget.org/v3/index.json",
                 }, true)
             {
@@ -139,7 +140,7 @@ namespace ExtensionManager.ViewModels
             {
                 Debug.WriteLine("In refresh packages Task");
                 
-                var packages = repository.GetPackages()
+                var packages = repository.Repositories.First(x => x.Source == Settings.FeedUrl).GetPackages()
                     .Where(x => x.Tags.Contains("extension"))
                     .ToList()
                     .GroupBy(x => x.Id, (id, packs) =>
