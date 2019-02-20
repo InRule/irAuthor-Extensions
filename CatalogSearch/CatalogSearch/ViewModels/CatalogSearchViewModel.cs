@@ -148,54 +148,52 @@ namespace CatalogSearch.ViewModels
 
                     foreach (var ruleApp in ruleApps)
                     {
-                        var ruleAppDef = ruleApp.Key;
+                        var ruleAppDefInfo = ruleApp.Key;
                         var ruleAppInfo = ruleApp.Value;
 
-                        Debug.WriteLine($"Searching Rule App {ruleAppDef.Name} v{ruleAppDef.PublicRevision} {ruleAppInfo.LastLabelName}");
+                        Debug.WriteLine($"Searching Rule App {ruleAppDefInfo.Name} v{ruleAppDefInfo.PublicRevision} {ruleAppInfo.LastLabelName}");
 
-                        var ruleAppRef = new CatalogRuleApplicationReference(Settings.CatalogServiceUrl, ruleAppDef.Name, Settings.CatalogUsername, Settings.CatalogPassword, ruleAppDef.PublicRevision);
-                        using (var session = new RuleSession(ruleAppRef))
+                        var ruleAppRef = new CatalogRuleApplicationReference(Settings.CatalogServiceUrl, ruleAppDefInfo.Name, Settings.CatalogUsername, Settings.CatalogPassword, ruleAppDefInfo.PublicRevision);
+                        var ruleAppDef = ruleAppRef.GetRuleApplicationDef();
+                        var entities = ((IEnumerable<EntityDef>)ruleAppDef.Entities);
+                        foreach (var entity in entities)
                         {
-                            var entities = ((IEnumerable<EntityDef>)session.GetRuleApplicationDef().Entities);
-                            foreach (var entity in entities)
+                            foreach (var ruleSet in entity.GetAllRuleSets())
                             {
-                                foreach (var ruleSet in entity.GetAllRuleSets())
+                                switch (field)
+                                {
+                                    case SearchField.Description:
+                                        if (ruleSet.Comments.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
+                                            dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDefInfo, ruleSet, ruleSet.Comments, Settings)); }));
+                                        break;
+                                    case SearchField.Name:
+                                        if (ruleSet.Name.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
+                                            dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDefInfo, ruleSet, ruleSet.Name, Settings)); }));
+                                        break;
+                                    case SearchField.Note:
+                                        var matchingNote = ruleSet.Notes.FirstOrDefault(n => n.Text.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase));
+                                        if (matchingNote != null)
+                                            dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDefInfo, ruleSet, matchingNote.Text, Settings)); }));
+                                        break;
+                                }
+
+                                foreach (RuleElementDef rule in ruleSet.GetAllRuleElements())
                                 {
                                     switch (field)
                                     {
                                         case SearchField.Description:
-                                            if (ruleSet.Comments.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
-                                                dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDef, ruleSet, ruleSet.Comments, Settings)); }));
+                                            if (rule.Comments.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
+                                                dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDefInfo, ruleSet, rule.Comments, Settings, rule)); }));
                                             break;
                                         case SearchField.Name:
-                                            if (ruleSet.Name.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
-                                                dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDef, ruleSet, ruleSet.Name, Settings)); }));
+                                            if (rule.Name.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
+                                                dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDefInfo, ruleSet, rule.Name, Settings, rule)); }));
                                             break;
                                         case SearchField.Note:
-                                            var matchingNote = ruleSet.Notes.FirstOrDefault(n => n.Text.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase));
+                                            var matchingNote = rule.Notes.FirstOrDefault(n => n.Text.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase));
                                             if (matchingNote != null)
-                                                dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDef, ruleSet, matchingNote.Text, Settings)); }));
+                                                dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDefInfo, ruleSet, matchingNote.Text, Settings, rule)); }));
                                             break;
-                                    }
-
-                                    foreach (RuleElementDef rule in ruleSet.GetAllRuleElements())
-                                    {
-                                        switch (field)
-                                        {
-                                            case SearchField.Description:
-                                                if (rule.Comments.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
-                                                    dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDef, ruleSet, rule.Comments, Settings, rule)); }));
-                                                break;
-                                            case SearchField.Name:
-                                                if (rule.Name.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase))
-                                                    dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDef, ruleSet, rule.Name, Settings, rule)); }));
-                                                break;
-                                            case SearchField.Note:
-                                                var matchingNote = rule.Notes.FirstOrDefault(n => n.Text.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase));
-                                                if (matchingNote != null)
-                                                    dispatcher.BeginInvoke(new Action(() => { Results.Add(new CatalogSearchResultViewModel(ruleAppDef, ruleSet, matchingNote.Text, Settings, rule)); }));
-                                                break;
-                                        }
                                     }
                                 }
                             }
