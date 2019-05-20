@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+using InRule.Authoring.ComponentModel;
 using NuGet;
 
 namespace ExtensionManager.ViewModels
 {
-    public class ExtensionRowViewModel : INotifyPropertyChanged
+    public class ExtensionRowViewModel : ObservableObject
     {
         public Guid ExtensionId { get; set; }
-
         public IPackage Package { get; set; }
-
-        public IPackageMetadata PackageMetadata => Package as IPackageMetadata;
+        public IPackageMetadata PackageMetadata => Package;
+        public string LatestVersion { get; set; }
 
         private bool updateAvailable;
         public bool UpdateAvailable
@@ -23,7 +20,8 @@ namespace ExtensionManager.ViewModels
                 if (updateAvailable == value) return;
 
                 updateAvailable = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateAvailable"));
+
+                OnPropertyChanged(nameof(UpdateAvailable));
             }
         }
 
@@ -36,7 +34,8 @@ namespace ExtensionManager.ViewModels
                 if (isInstalled == value) return;
 
                 isInstalled = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsInstalled"));
+
+                OnPropertyChanged(nameof(IsInstalled));
             }
         }
 
@@ -48,9 +47,10 @@ namespace ExtensionManager.ViewModels
             {
                 var shouldRaise = isEnabled == value;
                 isEnabled = value;
-                if (PropertyChanged != null && shouldRaise)
+
+                if (shouldRaise)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("IsEnabled"));
+                    OnPropertyChanged(nameof(IsEnabled));
                 }
             }
         }
@@ -64,12 +64,9 @@ namespace ExtensionManager.ViewModels
                 if (value == installedVersion) return;
 
                 installedVersion = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InstalledVersion"));
+
+                OnPropertyChanged(nameof(InstalledVersion));
             }
         }
-
-        public string LatestVersion { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

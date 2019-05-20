@@ -105,7 +105,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DebugLogger.cs" />
     <Compile Include="ViewModels\ExtensionBrowserViewModel.cs" />
-    <Compile Include="ViewModels\ExtensionCommandEventArgs.cs" />
     <Compile Include="ViewModels\ExtensionRowViewModel.cs" />
     <Compile Include="Views\ExtensionBrowser.xaml.cs">
       <DependentUpon>ExtensionBrowser.xaml</DependentUpon>
