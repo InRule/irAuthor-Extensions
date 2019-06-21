@@ -10,7 +10,7 @@
     <projectUrl>http://roadget.azurewebsites.net/</projectUrl>
     <iconUrl>http://roadget.azurewebsites.net/InRule32.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The Extension Manager for IrAuthor allows users to browse, download, install, and update extensions from the irXchange feed provided by ROADGet</description>
+    <description>The Extension Manager for irAuthor allows users to browse, download, install, and update extensions from the irXchange feed provided by ROADGet</description>
     <releaseNotes>Initial preview release</releaseNotes>
     <copyright>Copyright 2015 InRule Technology</copyright>
     <tags>extension</tags>

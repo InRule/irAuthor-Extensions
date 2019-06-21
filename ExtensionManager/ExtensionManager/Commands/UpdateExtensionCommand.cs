@@ -1,57 +1,49 @@
-using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using ExtensionManager.ViewModels;
-using NuGet;
+using InRule.Authoring.Windows;
 
 namespace ExtensionManager.Commands
 {
     class UpdateExtensionCommand : CommandBase
     {
-        public UpdateExtensionCommand(string extensionsDirectory, IPackageRepository repository, ExtensionBrowserViewModel extensionBrowserViewModel)
-            : base(extensionsDirectory, repository, extensionBrowserViewModel)
-        {
-
-        }
-
-        public override event EventHandler CanExecuteChanged;
+        public UpdateExtensionCommand(ExtensionBrowserViewModel extensionBrowserViewModel)
+            : base(extensionBrowserViewModel)
+        {}
 
         public override bool CanExecute(object parameter)
         {
-            var s = parameter as ExtensionRowViewModel;
-            var canExecute = s != null && s.UpdateAvailable;
+            var vm = parameter as ExtensionRowViewModel;
+            var canExecute = vm != null && vm.UpdateAvailable;
             
             return canExecute;
         }
 
         public override void Execute(object parameter)
         {
-            var rowModel = parameter as ExtensionRowViewModel;
-            if (rowModel == null)
-            {
-                return;
-            }
-            ViewModel.RaiseWorkStarted();
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    PackageManager.UpdatePackage(rowModel.Package.Id, false, true);
-                    rowModel.UpdateAvailable = false;
-                    dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                    MessageBox.Show(ex.ToString());
-                    throw;
-                }
-            }).ContinueWith((t) => ViewModel.RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());
+            var vm = parameter as ExtensionRowViewModel;
 
+            var window = new BackgroundWorkerWaitWindow("Update Extension", $"Updating the '{vm.PackageMetadata.Title}' extension...");
+            window.DoWork += delegate
+            {
+                PackageManager.UpdatePackage(vm.Package.Id, false, true);
+                vm.UpdateAvailable = false;
+            };
+            window.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs args)
+            {
+                if (args.Error == null)
+                {
+                    ViewModel.RestartApplicationWithConfirm();
+                }
+                else
+                {
+                    Debug.WriteLine(args.Error.ToString());
+                    MessageBox.Show(args.Error.ToString());
+                    throw args.Error;
+                }
+            };
+            window.ShowDialog();
         }
     }
 }

@@ -1,50 +1,50 @@
-using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using ExtensionManager.ViewModels;
-using NuGet;
 using System.Windows;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+using InRule.Authoring.Windows;
 
 namespace ExtensionManager.Commands
 {
     class RemoveExtensionCommand : CommandBase
     {
-        public RemoveExtensionCommand(string extensionPath, IPackageRepository repos, ExtensionBrowserViewModel viewModel) : base(extensionPath, repos, viewModel) { }
+        public RemoveExtensionCommand(ExtensionBrowserViewModel viewModel) 
+            : base(viewModel)
+        {}
+
         public override bool CanExecute(object parameter)
         {
-            var s = parameter as ExtensionRowViewModel;
+            var vm = parameter as ExtensionRowViewModel;
             
-            return s != null && s.IsInstalled && s.Package != null;
+            return vm != null && vm.IsInstalled && vm.Package != null;
         }
 
         public override void Execute(object parameter)
         {
-            var s = parameter as ExtensionRowViewModel;
-            Debug.Assert(s != null);
+            var vm = parameter as ExtensionRowViewModel;
              
-            ViewModel.RaiseWorkStarted();
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            Task.Factory.StartNew(() =>
+            var window = new BackgroundWorkerWaitWindow("Uninstall Extension", $"Uninstalling the '{vm.PackageMetadata.Title}' extension...");
+            window.DoWork += delegate
             {
-                try
+                vm.IsInstalled = false;
+                vm.IsEnabled = false;
+                PackageManager.UninstallPackage(vm.Package, true, true);
+                ViewModel.InvokeSettingsChanged();
+            };
+            window.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs args)
+            {
+                if (args.Error == null)
                 {
-                    s.IsInstalled = false;
-                    s.IsEnabled = false;
-                    PackageManager.UninstallPackage(s.Package, true, true);
-                    ViewModel.InvokeSettingsChanged();
-                    dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
+                    ViewModel.RestartApplicationWithConfirm();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.WriteLine(ex.ToString());
-                    MessageBox.Show(ex.ToString());
-                    throw;
+                    Debug.WriteLine(args.Error.ToString());
+                    MessageBox.Show(args.Error.ToString());
+                    throw args.Error;
                 }
-            }).ContinueWith((t) => ViewModel.RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());
+            };
+            window.ShowDialog();
         }
-        
-        public override event EventHandler CanExecuteChanged;
     }
 }

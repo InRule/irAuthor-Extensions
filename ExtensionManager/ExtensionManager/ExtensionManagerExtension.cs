@@ -8,9 +8,6 @@ using InRule.Authoring.Commanding;
 using InRule.Authoring.Media;
 using InRule.Authoring.Windows;
 using InRule.Authoring.Windows.Settings;
-using System.Linq;
-using InRule.Authoring.Settings;
-using InRule.Authoring.Services;
 
 namespace ExtensionManager
 {
@@ -39,8 +36,7 @@ namespace ExtensionManager
             
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
-            var button = group.AddButton(ViewGalleryCommand);
-
+            _ = group.AddButton(ViewGalleryCommand);
         }
 
         private void ViewGallery(object obj)
@@ -49,7 +45,7 @@ namespace ExtensionManager
             var irAuthorSettings = SettingsStorageService.LoadSettings<IrAuthorSettings>(ExtensionManager.Constants.IrAuthorSettings);
             settings.EnabledExtensions = irAuthorSettings.EnabledUserExtensions;
 
-            var viewModel = new ExtensionBrowserViewModel(settings);
+            var viewModel = ServiceManager.Compose<ExtensionBrowserViewModel>(settings);
             viewModel.InstalledExtensions = extensions;
             
             viewModel.SettingsChanged +=
@@ -60,7 +56,7 @@ namespace ExtensionManager
             {
                 Owner = Application.Current.MainWindow
             };
-            window.Show();
+            window.ShowDialog();
         }
     }
 }

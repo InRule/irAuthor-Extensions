@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using ExtensionManager.Commands;
 using ExtensionManager.Views;
 using InRule.Authoring.Services;
 using InRule.Authoring.Windows;
-using InRule.Authoring.Windows.Settings;
 
 namespace ExtensionManager.ViewModels
 {
@@ -22,34 +16,17 @@ namespace ExtensionManager.ViewModels
     using System.Diagnostics;
     using System.IO;
 
-    public class ExtensionBrowserViewModel : INotifyPropertyChanged, IDisposable
+    public class ExtensionBrowserViewModel 
     {
         public event EventHandler<ExtensionManagerSettings> SettingsChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler WorkStarted;
-        public event EventHandler WorkComplete;
 
         public ExtensionBrowser ExtensionBrowserView { private get; set; }
         public ObservableCollection<ExtensionRowViewModel> Extensions { get; }
         public ICommand AddExtensionCommand { get; }
         public ICommand RemoveExtensionCommand { get; }
-
-        public int Progress {
-            get { return operationProgress; }
-            set {
-                if (operationProgress == value) return;
-                operationProgress = value;
-                Debug.WriteLine("Progress Changing");
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Progress"));
-            }
-        }
-
-        public bool ShowProgress => Progress > 0;
-
-        public ICommand UpdateExtensionCommand
-        {
-            get;
-        }
+        public IIrAuthorShell IrAuthorShell { get; set; }
+        public RuleApplicationService RuleApplicationService { get; set; }
+        public ICommand UpdateExtensionCommand { get; }
         public IEnumerable<IExtension> InstalledExtensions { get; set; } 
         public readonly PackageManager PackageManager;
 
@@ -57,9 +34,6 @@ namespace ExtensionManager.ViewModels
         private readonly AggregateRepository repository;
 
         internal readonly ExtensionManagerSettings Settings;
-        private int operationProgress = 0;
-
-        public ExtensionBrowserViewModel() : this(new ExtensionManagerSettings()) {}
 
         public ExtensionBrowserViewModel(ExtensionManagerSettings settings)
         {
@@ -85,61 +59,39 @@ namespace ExtensionManager.ViewModels
             PackageManager.FileSystem.Logger = PackageManager.Logger;
             repository.Logger = PackageManager.Logger;
 
-            var addExt = new AddExtensionCommand(ExtensionsDirectory, repository, this);
-            AddExtensionCommand = addExt;
-
-            var remExt = new RemoveExtensionCommand(ExtensionsDirectory, repository, this);
-            RemoveExtensionCommand = remExt;
-
-            var updateExt = new UpdateExtensionCommand(ExtensionsDirectory, repository, this);
-            UpdateExtensionCommand = updateExt;
-
-            PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName != "Progress") return;
-                Debug.WriteLine("ShowProgress changing");
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShowProgress"));
-            };
-            
-            WorkStarted += (sender, e) => Progress = 1;
-            WorkComplete += (sender, e) => Progress = 0;
+            AddExtensionCommand = new AddExtensionCommand(this);
+            RemoveExtensionCommand = new RemoveExtensionCommand(this);
+            UpdateExtensionCommand = new UpdateExtensionCommand(this);
 
             RefreshPackageList();
         }
 
-        public void RaiseWorkStarted()
-        {
-            Debug.WriteLine("Raising WorkStarted");
-            WorkStarted?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void RaiseWorkComplete()
-        {
-            Debug.WriteLine("Raising WorkComplete");
-            WorkComplete?.Invoke(this, EventArgs.Empty);
-        }
-
         internal void RestartApplicationWithConfirm()
         {
-            var result = MessageBox.Show(ExtensionBrowserView,
-                       "Requested operation has been completed. IrAuthor must be restarted before your changes can take effect. Would you like to restart IrAuthor now?",
-                       "Restart needed", MessageBoxButton.YesNo);
+            var restart = MessageBoxFactory.ShowYesNo("Requested operation has been completed. irAuthor must be restarted before your changes can take effect. Would you like to restart irAuthor now?", "Restart needed", MessageBoxFactoryImage.Question, ExtensionBrowserView);
 
-            if (result != MessageBoxResult.Yes) return;
+            if (!restart) return;
 
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-            Application.Current.Shutdown();
+            // If a ruleapp is loaded, give them the opportunity to save it or cancel.
+            if (RuleApplicationService.RuleApplicationDef != null)
+            {
+                restart = RuleApplicationService.Close();
+            }
+
+            if (!restart) return;
+
+            Process.Start(Application.ResourceAssembly.Location);
+
+            IrAuthorShell.Exit();
         }
 
         public void RefreshPackageList(bool showInstalledOnly = false)
         {
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            RaiseWorkStarted();
-            
-            Task.Factory.StartNew(() =>
+            var window = new BackgroundWorkerWaitWindow("Loading Extensions", $"Loading extensions from the InRule Extension Exchange service...");
+            window.DoWork += delegate(object sender, DoWorkEventArgs args) 
             {
                 Debug.WriteLine("In refresh packages Task");
-                
+
                 var packages = repository.Repositories.First(x => x.Source == Settings.FeedUrl).GetPackages()
                     .Where(x => x.Tags.Contains("extension"))
                     .ToList()
@@ -153,28 +105,36 @@ namespace ExtensionManager.ViewModels
                             UpdateAvailable = currentPackage != null && !currentPackage.IsLatestVersion,
                             IsInstalled = currentPackage != null,
                             LatestVersion = latestVersion.ToNormalizedString(),
-                            InstalledVersion = currentPackage == null ? "--" : currentPackage.Version.ToNormalizedString(),                            
+                            InstalledVersion = currentPackage == null ? "--" : currentPackage.Version.ToNormalizedString(),
                             Package = packs.First(p => p.Id == id)
                         };
                     })
                     .ToList()
                     .Where(x => !showInstalledOnly || x.IsInstalled);
-                Debug.WriteLine("Got packages. Invoking action on dispatcher to populate UI");
-                dispatcher.BeginInvoke(new Action(() => { Extensions.Clear(); Extensions.AddRange(packages);}));
 
-            }).ContinueWith((t) => RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());
+                args.Result = packages;
+            };
+            window.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs args)
+            {
+                Debug.WriteLine("Got packages.");
+                if (args.Error == null)
+                {
+                    Extensions.Clear();
+                    Extensions.AddRange((IEnumerable<ExtensionRowViewModel>)args.Result);
+                }
+                else
+                {
+                    Debug.WriteLine(args.Error.ToString());
+                    MessageBox.Show(args.Error.ToString());
+                    throw args.Error;
+                }
+            };
+            window.ShowDialog();
         }
 
         internal void InvokeSettingsChanged()
         {
             SettingsChanged?.Invoke(this, Settings);
         }
-
-        public void Dispose()
-        {
-
-        }
-
-        
     }
 }

@@ -1,55 +1,56 @@
-using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using ExtensionManager.ViewModels;
-using NuGet;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+using InRule.Authoring.Windows;
 
 namespace ExtensionManager.Commands
 {
     class AddExtensionCommand : CommandBase
     {
-        public AddExtensionCommand(string extensionPath, IPackageRepository repos, ExtensionBrowserViewModel viewModel) : base(extensionPath, repos, viewModel) {}
+        public AddExtensionCommand(ExtensionBrowserViewModel viewModel) 
+            : base(viewModel)
+        {}
+
         public override bool CanExecute(object parameter)
         {
-            var s = parameter as ExtensionRowViewModel;
-            return s?.Package != null && !s.IsInstalled;
+            var vm = parameter as ExtensionRowViewModel;
+            return vm?.Package != null && !vm.IsInstalled;
         }
 
         public override void Execute(object parameter)
         {
-            var packageVm = parameter as ExtensionRowViewModel;
-            if (packageVm == null) return;
+            var vm = parameter as ExtensionRowViewModel;
 
-            ViewModel.RaiseWorkStarted();
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            Task.Factory.StartNew(() =>
+            if (vm == null) return;
+
+            var window = new BackgroundWorkerWaitWindow("Install Extension", $"Installing the '{vm.PackageMetadata.Title}' extension...");
+            window.DoWork += delegate
             {
-                try
+                PackageManager.InstallPackage(vm.Package, false, true);
+            };
+            window.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs args)
+            {
+                if (args.Error == null)
                 {
-                    PackageManager.InstallPackage(packageVm.Package, false, true);
-                    packageVm.IsInstalled = true;
+                    vm.IsInstalled = true;
 
-                    if (!ViewModel.Settings.EnabledExtensions.Contains(packageVm.ExtensionId.ToString()))
+                    if (!ViewModel.Settings.EnabledExtensions.Contains(vm.ExtensionId.ToString()))
                     {
-                        ViewModel.Settings.EnabledExtensions.Add(packageVm.ExtensionId.ToString());
-
+                        ViewModel.Settings.EnabledExtensions.Add(vm.ExtensionId.ToString());
                     }
 
                     ViewModel.InvokeSettingsChanged();
-                    dispatcher.BeginInvoke(new Action(() => ViewModel.RestartApplicationWithConfirm()));
+                    ViewModel.RestartApplicationWithConfirm();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.WriteLine(ex.ToString());
-                    MessageBox.Show(ex.ToString());
-                    throw;
+                    Debug.WriteLine(args.Error.ToString());
+                    MessageBox.Show(args.Error.ToString());
+                    throw args.Error;
                 }
-            }).ContinueWith((t) => ViewModel.RaiseWorkComplete(), TaskScheduler.FromCurrentSynchronizationContext());
+            };
+            window.ShowDialog();
         }
-
-        public override event EventHandler CanExecuteChanged;
     }
 }
