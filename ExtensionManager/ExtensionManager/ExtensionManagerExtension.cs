@@ -36,7 +36,7 @@ namespace ExtensionManager
             
             var homeTab = IrAuthorShell.HomeTab;
             var group = homeTab.AddGroup("Extension Gallery", ImageFactory.GetImage("irAuthor", "Images/SmileFace16.png"));
-            @group.AddButton(ViewGalleryCommand);
+            _ = group.AddButton(ViewGalleryCommand);
         }
 
         private void ViewGallery(object obj)
