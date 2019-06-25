@@ -268,3 +268,7 @@ paket-files/
 __pycache__/
 *.pyc
 /Output
+
+# Cake
+tools/**
+!tools/packages.config
