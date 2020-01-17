@@ -3,6 +3,8 @@ A collection of irAuthor extensions. Most are "user" extensions (as opposed to "
 
 All extension projects reference the InRule SDK in `%programfiles%\InRule`, so it should simply be a matter of downloading and compiling.
 
+Please note that these extensions are not officially supported by InRule Technology.
+
 |Extension|Description|
 |---|---|
 |[CatalogSearch](CatalogSearch)|Allows a search to be performed through all Rule Applications in a Catalog over a variety of fields
