@@ -3,7 +3,14 @@ A collection of irAuthor extensions. Most are "user" extensions (as opposed to "
 
 All extension projects reference the InRule SDK in `%programfiles%\InRule`, so it should simply be a matter of downloading and compiling.
 
-Please note that these extensions are not officially supported by InRule Technology.
+## Managed
+These extensions are available as compiled assemblies with all installation media included in the release.
+|Extension|Description|
+|---|---|
+|[MergeExtension](MergeExtension)|Identify and review the differences between two different Rule Applications, and then merge selected changes together
+
+## Unmanaged
+These extensions are not officially supported by InRule Technology, but the source code is available for you to build or use as an example for an extension being built in-house.
 
 |Extension|Description|
 |---|---|
@@ -21,12 +28,12 @@ Please note that these extensions are not officially supported by InRule Technol
 |[TitleVersion](TitleVersion)|Adds the current version of irAuthor to the title bar of the application
 |[UndoExtension](UndoExtension)|Enhances the Undo functionality of irAuthor
 
-## Build
+## Building Unmanaged Extensions
 1. Retrieve a copy of the source for the extension you're interested in (either via cloning or downloading an archive of the appropriate folder)
 2. Open the solution for the extension, and Restore Nuget Packages, making sure that you have your irSDK files configured as an available NuGet source.  Alternatively, add new references for your local irSDK InRule assemblies.
 3. Build the solution
 
-## Installation
+## Installing Unmanaged Extensions
 1. Make sure IrAuthor is not open
 2. Create a subfolder in your Extensions folder for the new extension (default location is C:\Program Files (x86)\InRule\irAuthor\Extensions\)
 3. Copy the build extension from your build directory into the new directory, making sure NOT to include any of the InRule.* or ActiproSoftware.* assemblies
