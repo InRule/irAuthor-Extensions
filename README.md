@@ -5,6 +5,7 @@ All extension projects reference the InRule SDK in `%programfiles%\InRule`, so i
 
 ## Managed
 These extensions are available as compiled assemblies with all installation media included in the release.
+
 |Extension|Description|
 |---|---|
 |[MergeExtension](MergeExtension)|Identify and review the differences between two different Rule Applications, and then merge selected changes together
