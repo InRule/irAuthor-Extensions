@@ -91,7 +91,7 @@ namespace InRule.Authoring.Extensions.ExportTable
             {
                 return null;
             }
-            var rowCount = 0;
+            var rowCount = dataSet.Tables[0].Rows.Count;
             var lines = new string[rowCount];
             var rowNum = 0;
 
