@@ -83,6 +83,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <Button Margin="0,3,10,3" Content="Refresh"  Style="{StaticResource LinkButton}" Click="RefreshRuleApplicationList_Click"/>
+                <Button Margin="0,3,10,3" Content="Delete All"  Style="{StaticResource LinkButton}" Click="DeleteAll_Click"/>
                 <Button Margin="0,3,10,3" Content="Close"  Style="{StaticResource LinkButton}" Click="Close_Click"/>
             </StackPanel>
         </Grid>
