@@ -35,30 +35,38 @@
   <ItemGroup>
     <Reference Include="InRule.Authoring, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.5.4.0\lib\net461\InRule.Authoring.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Editors, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.5.4.0\lib\net461\InRule.Authoring.Editors.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Windows, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.5.4.0\lib\net461\InRule.Authoring.Windows.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Common, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Common.5.4.0\lib\net461\InRule.Common.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Repository, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Repository.5.4.0\lib\net461\InRule.Repository.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Repository.XmlSerializers, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Repository.5.4.0\lib\net461\InRule.Repository.XmlSerializers.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Runtime, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Runtime.5.4.0\lib\net461\InRule.Runtime.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Web.XmlTransform, Version=3.0.0.34420, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Xdt.3.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -73,6 +81,7 @@
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
