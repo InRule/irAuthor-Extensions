@@ -10,15 +10,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/InRuleLabs.AuthoringExtensions.FieldsInUse;component/Resources/ExtensionStyles.xaml"/>
-
-                <ResourceDictionary>
-                    <Authoring:Strings x:Key="Strings" />
-                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-
-
         </ResourceDictionary>
-      
     </Window.Resources>
     <Grid Name="grdMain">
         <Grid Grid.Row="0">

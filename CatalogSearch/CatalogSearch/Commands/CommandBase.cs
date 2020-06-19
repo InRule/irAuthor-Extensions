@@ -1,6 +1,5 @@
 using System;
 using System.Windows.Input;
-using NuGet;
 using System.ComponentModel;
 using CatalogSearch.ViewModels;
 

@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="ActiproSoftware.Navigation.Wpf, Version=13.2.592.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ActiproSoftware.PropertyGrid.Wpf, Version=13.2.592.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.SDK.5.4.0\lib\net461\ActiproSoftware.PropertyGrid.Wpf.dll</HintPath>
@@ -58,9 +59,11 @@
     </Reference>
     <Reference Include="ActiproSoftware.Ribbon.Wpf, Version=13.2.592.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf, Version=13.2.592.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\ActiproSoftware.Shared.Wpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ActiproSoftware.SyntaxEditor.Wpf, Version=13.2.592.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.SDK.5.4.0\lib\net461\ActiproSoftware.SyntaxEditor.Wpf.dll</HintPath>
@@ -84,15 +87,18 @@
     </Reference>
     <Reference Include="InRule.Authoring, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\InRule.Authoring.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Core.Navigation, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\InRule.Authoring.Core.Navigation.dll</HintPath>
     </Reference>
     <Reference Include="InRule.Authoring.Editors, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\InRule.Authoring.Editors.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Authoring.Windows, Version=5.4.0.191, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Authoring.Core.Navigation.5.4.0\lib\net461\InRule.Authoring.Windows.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="InRule.Common, Version=5.4.0.166, Culture=neutral, PublicKeyToken=1feb8dd25b1ceb6b, processorArchitecture=MSIL">
       <HintPath>..\packages\InRule.Common.5.4.0\lib\net461\InRule.Common.dll</HintPath>
@@ -116,12 +122,14 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />

@@ -9,7 +9,6 @@ using CatalogSearch.Views;
 using InRule.Repository;
 using InRule.Repository.Client;
 using InRule.Runtime;
-using NuGet;
 using System.ComponentModel;
 using System.Diagnostics;
 using CatalogSearch.Commands;
