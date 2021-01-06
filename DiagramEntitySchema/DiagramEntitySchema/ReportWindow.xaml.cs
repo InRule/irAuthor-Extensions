@@ -10,7 +10,6 @@ namespace InRule.Authoring.Extensions.DiagramEntitySchema
         public ReportWindow()
         {
             InitializeComponent();
-            ScriptingHelper helper = new ScriptingHelper(this);
         }
     }
 }
