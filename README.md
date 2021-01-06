@@ -19,6 +19,7 @@ These extensions are not officially supported by InRule Technology, but the sour
 |[Commander](Commander)|Allows the user to access and execute any command for the currently selected item via the keyboard
 |[DecisionTableExporter](DecisionTableExporter)|Exports Decision Tables to csv
 |[DecisionTableImporter](DecisionTableImporter)|Imports Decision Tables from Excel
+|[DiagramEntitySchema](DiagramEntitySchema)|Displays an interactive graph of the Rule Application's Entity Schema and relationships
 |[ExportTable](ExportTable)|Exports Inline Tables
 |[ExtensionManager](ExtensionManager)|Allows management of installed extensions from a central extension feed
 |[FieldsInUse](FieldsInUse)|Delivers a rich report about which fields are currently in use in the application

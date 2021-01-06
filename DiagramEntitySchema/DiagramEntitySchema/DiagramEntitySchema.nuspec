@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://roadget.azurewebsites.net/inruleeula.txt</licenseUrl>
+    <iconUrl>http://roadget.azurewebsites.net/inrule32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>An irAuthor extension that helps authors visualize the entity schema of ruleapp.</releaseNotes>
+    <copyright>Copyright 2021</copyright>
+    <tags>InRule irAuthor Extension Diagram Entity Schema</tags>
+  </metadata>
+</package>

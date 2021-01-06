@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.4/dagre-d3.min.js"></script>
+        <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            var ruleAppEntities = {ENTITYSTRUCTURE};
+
+            var lineStdColor = "stroke: #333;fill: transparent;";
+            var lineTempColor = "stroke: #CCC;fill: transparent;";
+            var lineStdWidth = "stroke-width: 2px;";
+            var lineCollectionWidth = "stroke-width: 5px;";
+            var arrowStdColor = "fill: #333";
+            var arrowTempColor = "fill: #CCC";
+            var showAllFields = detectBrowser() != "Chrome"; //Chrome's layout makes the boxes half the size they need to be for the fields, so it doesn't lay out properly.
+            function loadGraph() {
+                var g = new dagreD3.graphlib.Graph({ multigraph: true }).setGraph({});
+
+                // Create entity objects
+                ruleAppEntities.forEach(function(entity) { 
+                    g.setNode(entity.name); 
+                });
+
+                // Establish relationships and set entity object labels appropriately
+                ruleAppEntities.forEach(function(entity) { 
+                    var entityFields = "";
+                    entity.fields.forEach(function(field) {
+                        // Build and set field information
+                        var fieldInfo = field.name + " (";
+                        if(field.dataType == "Entity") fieldInfo += field.entityName;
+                        else fieldInfo += field.dataType;
+                        if(field.isCollection) fieldInfo += "[]";
+                        fieldInfo += ")";
+                        entityFields += "<li class='" + (field.isTemporary ? "temp field" : "field") + "'>" + fieldInfo + "</li>";
+
+                        // For entity relationships, add connecting lines
+                        if(field.dataType == "Entity") {
+                            g.setEdge(
+                                entity.name, 
+                                field.entityName, 
+                                { 
+                                    label: field.name, 
+                                    //curve: d3.curveBasis, // Curves look prettier, but cause the line labels to not be in the right place in complex schemas, and fail entirely in non-Firefox browsers
+                                    style: (field.isCollection ? lineCollectionWidth : lineStdWidth) + (field.isTemporary ? lineTempColor : lineStdColor),
+                                    arrowheadStyle: field.isTemporary ? arrowTempColor : arrowStdColor,
+                                    labelStyle: ""
+                                },
+                                entity.name + "." + field.name // Required for MultiGraph
+                            );
+                        }
+                    });
+                    
+                    if(showAllFields) {
+                        g.setNode(entity.name, { 
+                            labelType: "html",
+                            label: "<span class='entityName'>" + entity.name + "</span><ul>" + entityFields + "</ul>",
+                            style: "stroke: #888; fill: #DDD;"
+                        });
+                    }
+                    else {
+                        g.setNode(entity.name, { 
+                            label: entity.name,
+                            style: "stroke: #888; fill: #DDD;"
+                        }); 
+                    }
+                });
+
+                // Set up the components, then execute the render
+                var svg = d3.select("svg");
+                var inner = svg.select("g");
+
+                var zoom = d3.zoom().on("zoom", function() {
+                    inner.attr("transform", d3.event.transform);
+                    });
+                svg.call(zoom);
+
+                var render = new dagreD3.render();
+                render(inner, g);
+            }
+
+            document.addEventListener("DOMContentLoaded", function(){
+                if(detectBrowser() != "IE")
+                    loadGraph();
+                else
+                    document.body.innerHTML = "Internet Explorer is not supported by this tool.";
+            });
+
+            function detectBrowser() { 
+                if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) {
+                    return 'Opera';
+                } else if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+                    return 'Chrome';
+                } else if(navigator.userAgent.indexOf("Safari") != -1) {
+                    return 'Safari';
+                } else if(navigator.userAgent.indexOf("Firefox") != -1 ){
+                    return 'Firefox';
+                } else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) {
+                    return 'IE';
+                } else {
+                    return 'Unknown';
+                }
+            } 
+        </script>
+        <style>
+            body {
+              position: fixed;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              margin: 0;
+              padding: 0;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+              background-color: #FFF;
+            }
+            svg {
+              width: 100%;
+              height: 100%;
+              overflow: hidden;
+            }
+            ul {
+                margin-top: 0;
+            }
+    
+            .graph {
+              width: 100%;
+              height: 100%;
+              background-color: #FFF;
+            }
+            .field {
+                display: block;
+                font-size: xx-small;
+            }
+            .temp {
+                color:#888;
+            }
+          </style>
+    </head>
+    <body>
+        <div class="graph">
+          <svg><g/></svg>
+        </div>
+    </body>
+</html>
