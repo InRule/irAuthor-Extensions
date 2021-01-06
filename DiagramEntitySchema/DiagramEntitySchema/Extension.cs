@@ -47,7 +47,7 @@ namespace InRule.Authoring.Extensions.DiagramEntitySchema
                 string htmlContent = DiagramEntitySchema.Properties.Resources.SchemaDiagram;
                 htmlContent = htmlContent.Replace("{ENTITYSTRUCTURE}", jsonData);
 
-                var reportWindow = new ReportWindow();
+                var reportWindow = new ReportWindow(RuleApplicationService, SelectionManager);
                 reportWindow.webControl.Loaded += delegate
                 {
                     reportWindow.webControl.NavigateToString(htmlContent);
