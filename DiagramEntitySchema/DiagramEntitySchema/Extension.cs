@@ -56,12 +56,18 @@ namespace InRule.Authoring.Extensions.DiagramEntitySchema
         private void WhenRuleApplicationChanged(object sender, EventArgs e)
         {
             var enabled = RuleApplicationService.RuleApplicationDef != null;
-            _loadCommand.IsEnabled = enabled;
+
+            // Note that the sub-menu IsEnabled needs to be set before the parent control's IsEnabled
+            // when the parent control's enabled state changes, it queries the IsEnabled states of the menu's commands;
+            // it doesn't appear to re-draw the submenu's enabled state on the parent button if one of the menu commands' IsEnabled state changes.
+
             _localCommand.IsEnabled = enabled;
             _ffCommand.IsEnabled = IsFirefoxInstalled() && enabled;
             _browserCommand.IsEnabled = enabled;
+            
+            _loadCommand.IsEnabled = enabled;
         }
-        
+
         private void LoadDiagram(object obj)
         {
             try
@@ -91,9 +97,6 @@ namespace InRule.Authoring.Extensions.DiagramEntitySchema
         }
 
 
-
-
-
         // Helpers
         private string GetDiagramHtml()
         {
@@ -116,6 +119,7 @@ namespace InRule.Authoring.Extensions.DiagramEntitySchema
             RegistryKey firefixDir = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Mozilla\Mozilla Firefox", false);
             return firefixDir != null;
         }
+
 
         private string GetRuleAppEntityStructure(RuleApplicationDef def)
         {
