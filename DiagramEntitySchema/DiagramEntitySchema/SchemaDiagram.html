@@ -60,6 +60,7 @@
                     else {
                         g.setNode(entity.name, { 
                             label: entity.name,
+                            class: "entityName",
                             style: "stroke: #888; fill: #DDD;"
                         }); 
                     }
@@ -71,11 +72,21 @@
 
                 var zoom = d3.zoom().on("zoom", function() {
                     inner.attr("transform", d3.event.transform);
-                    });
+                });
                 svg.call(zoom);
 
                 var render = new dagreD3.render();
                 render(inner, g);
+
+                $(".entityName").on('click', function(event){
+                    //event.stopPropagation();
+                    //event.stopImmediatePropagation();
+                    var targetEntity = event.target.textContent;
+                    if(targetEntity == "") {
+                        targetEntity = event.target.parentElement.textContent;
+                    }
+                    window.external.notify("SelectEntity:" + targetEntity);
+                });
             }
 
             document.addEventListener("DOMContentLoaded", function(){
@@ -133,6 +144,9 @@
             }
             .temp {
                 color:#888;
+            }
+            .entityName {
+                cursor: pointer;
             }
           </style>
     </head>
