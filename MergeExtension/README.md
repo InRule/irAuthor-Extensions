@@ -9,7 +9,7 @@
 - IrAuthor version 5.2 or newer
 
 ## Installation
-1. Download the installation package from [here](https://github.com/InRule/irAuthor-Extensions/releases/download/MergeExtension_v1.0.2/Merge.Extension.v1.0.2.zip).  If needed, right-click on the download file, go to "Properties", and tick the box to "Un-block" the downloaded file.
+1. Download the installation package from [here](https://github.com/InRule/irAuthor-Extensions/releases/download/MergeExtension_v1.0.4/Merge.Extension.v1.0.4.zip).  If needed, right-click on the download file, go to "Properties", and tick the box to "Un-block" the downloaded file.
 2. Extract the archive into a folder on your PC (which should also have irAuthor is installed).
 3. Ensure there are no instances of irAuthor currently open.
 4. Run the appropriate batch file to install the extension (or manually copy the directory to the appropriate location).
