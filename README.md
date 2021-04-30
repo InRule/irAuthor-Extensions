@@ -24,6 +24,7 @@ These extensions are not officially supported by InRule Technology, but the sour
 |[ExtensionManager](ExtensionManager)|Allows management of installed extensions from a central extension feed
 |[FieldsInUse](FieldsInUse)|Delivers a rich report about which fields are currently in use in the application
 |[FindUnusedSchema](FindUnusedSchema)|Displays a simple note about schema items that are never used
+|[GenerateSDKCode](GenerateSDKCode)|Generates SDK Code to programmatically author elements using irSDK via the right-click menu
 |[NavigationToolWindows](NavigationToolWindows)|Allows navigation panes to be converted to tool windows and vice versa
 |[RefreshTemplateEngine](RefreshTemplateEngine)|Adds a ribbon button to refresh the template engine
 |[RuleFlowVisualizer](RuleFlowVisualizer)|Builds a visualization of the rule flow logic
