@@ -9,6 +9,8 @@ These extensions are available as compiled assemblies with all installation medi
 |Extension|Description|
 |---|---|
 |[MergeExtension](MergeExtension)|Identify and review the differences between two different Rule Applications, and then merge selected changes together
+|[MachineLearningExtension](MachineLearningExtension)|Execute Machine Learning models from xAI Workbench within your Rule Application
+|[DMN Modeler Extension](https://github.com/InRule/DMNModeler)|Model decisions using Decision Model and Notation 1.3 in conjuction with irAuthor
 
 ## Unmanaged
 These extensions are not officially supported by InRule Technology, but the source code is available for you to build or use as an example for an extension being built in-house.
