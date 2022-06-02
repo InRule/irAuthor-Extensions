@@ -13,11 +13,9 @@
         - Note that the user won’t be able to launch versions of irAuthor prior to 5.7.2 after running this batch, due to those versions being unable to load the extension.
         - Copies the extension files into "%localappdata%\InRule\irAuthor\ExtensionExchange\irX for Barium Live"
 5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
-    + Add one of the following lines in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config)  if not already there (the first option if running as a Production customer, the second if running in a Trial environment).
+    + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config) if not already there
 	```xml
 	<add key="inrule:authoring:tenantManagementApiUrl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
-	OR
-	<add key="inrule:authoring:tenantManagementApiUrl" value="https://ir-tenantmgmt-trial-ncus-wa.azurewebsites.net" />
 	```
 6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Barium" tab in the main ribbon  
 If you do not see it, go to File > Extensions and enable the Barium Extension. 
