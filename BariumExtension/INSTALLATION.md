@@ -10,7 +10,7 @@
     + Install_CurrentUser_AllInRuleVersions
         - Installs the extension for only the currently logged-in user, but for all versions of InRule that can be run on the PC.
         - This can be helpful for shared authoring VM environments, so users do not unintentionally receive the extension.
-        - Note that the user won’t be able to launch versions of irAuthor prior to 5.7.2 after running this batch, due to those versions being unable to load the extension.
+        - Note that the user won’t be able to launch versions of irAuthor prior to 5.7.3 after running this batch, due to those versions being unable to load the extension.
         - Copies the extension files into "%localappdata%\InRule\irAuthor\ExtensionExchange\irX for Barium Live"
 5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
     + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config) if not already there

@@ -8,7 +8,7 @@ The Barium extension is released as a managed extension.  This means that InRule
 The Barium Extension requires a valid Barium license.
 
 ## System Requirements
-* irAuthor version 5.7.2 or newer
+* irAuthor version 5.7.3 or newer
 * irAuthor System Requirements
 
 
