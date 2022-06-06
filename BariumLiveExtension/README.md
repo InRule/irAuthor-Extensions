@@ -21,10 +21,10 @@ Note that these installation instructions are only for existing InRule customers
 Complete documentation for usage of the Barium Live integration is available on the InRule Support site. Links to important articles are included below
 
 
-### [Introduction]()
+### [Introduction](https://support.inrule.com/hc/en-us/articles/6311709475213-Introduction)
 
-### [Calling Barium Live from InRule using the Execute Process action]()
+### [Calling Barium Live from InRule using the Execute Process action](support.inrule.com/hc/en-us/articles/6555560074509-Calling-Barium-Live-from-InRule-using-the-Execute-Process-action-)
 
-### [Calling InRule from Barium Live with the Execute Decision component]()
+### [Calling InRule from Barium Live with the Execute Decision component](https://support.inrule.com/hc/en-us/articles/6555489266957-Calling-InRule-from-Barium-Live-using-the-Execute-Decision-component)
 
-### [Using the Barium Live extension for irAuthor]()
+### [Using the Barium Live extension for irAuthor](https://support.inrule.com/hc/en-us/articles/6555435451277-Using-the-Barium-Live-extension-for-irAuthor)
