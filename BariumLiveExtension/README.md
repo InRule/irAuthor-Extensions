@@ -23,7 +23,7 @@ Complete documentation for usage of the Barium Live integration is available on 
 
 ### [Introduction](https://support.inrule.com/hc/en-us/articles/6311709475213-Introduction)
 
-### [Calling Barium Live from InRule using the Execute Process action](support.inrule.com/hc/en-us/articles/6555560074509-Calling-Barium-Live-from-InRule-using-the-Execute-Process-action-)
+### [Calling Barium Live from InRule using the Execute Process action](https://support.inrule.com/hc/en-us/articles/6555560074509-Calling-Barium-Live-from-InRule-using-the-Execute-Process-action-)
 
 ### [Calling InRule from Barium Live with the Execute Decision component](https://support.inrule.com/hc/en-us/articles/6555489266957-Calling-InRule-from-Barium-Live-using-the-Execute-Decision-component)
 
