@@ -31,6 +31,7 @@ These extensions are not officially supported by InRule Technology, but the sour
 |[NavigationToolWindows](NavigationToolWindows)|Allows navigation panes to be converted to tool windows and vice versa
 |[RefreshTemplateEngine](RefreshTemplateEngine)|Adds a ribbon button to refresh the template engine
 |[RuleFlowVisualizer](RuleFlowVisualizer)|Builds a visualization of the rule flow logic
+|[TestUsingSampleData](TestUsingSampleData)|Allows irVerify to be launched with pre-filled data from JSON files on the local disk
 |[TitleVersion](TitleVersion)|Adds the current version of irAuthor to the title bar of the application
 |[UndoExtension](UndoExtension)|Enhances the Undo functionality of irAuthor
 
