@@ -15,7 +15,7 @@
 5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
     + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config)  if not already there.
 	```xml
-	<add key="inrule:global:discovery:service" value="https://inrule-global-fa.azurewebsites.net/.well-known/discovery" />
+	<add key="inrule:global:discovery:service" value="https://global.inrule.com/.well-known/discovery" />
 	```
     + Add the following Binding Redirect if it is not already there (may be required for 5.7.2 and earlier).  As you add it, edit the version number (in this example, 5.7.2.240) in both the oldVersions and newVersion fields so that it matches the other InRule redirects in the config file.”
 	```xml
