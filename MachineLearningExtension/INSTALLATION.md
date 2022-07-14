@@ -13,11 +13,9 @@
         - Note that the user won’t be able to launch versions of irAuthor prior to 5.7.2 after running this batch, due to those versions being unable to load the extension.
         - Copies the extension files into "%localappdata%\InRule\irAuthor\ExtensionExchange\Machine Learning Extension"
 5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
-    + Add one of the following lines in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config)  if not already there (the first option if running as a Production customer, the second if running in a Trial environment).
+    + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config)  if not already there.
 	```xml
-	<add key="inrule:authoring:tenantManagementApiUrl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
-	OR
-	<add key="inrule:authoring:tenantManagementApiUrl" value="https://ir-tenantmgmt-trial-ncus-wa.azurewebsites.net" />
+	<add key="inrule:global:discovery:service" value="https://global.inrule.com/.well-known/discovery" />
 	```
     + Add the following Binding Redirect if it is not already there (may be required for 5.7.2 and earlier).  As you add it, edit the version number (in this example, 5.7.2.240) in both the oldVersions and newVersion fields so that it matches the other InRule redirects in the config file.”
 	```xml
@@ -26,7 +24,7 @@
 		<bindingRedirect oldVersion="1.0.0.0-5.7.2.240" newVersion="5.7.2.240" />
 	</dependentAssembly>
 	```
-6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Machine Learning" section in the main navigation on the left-hand side above "Decisions.”  
+6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Machine Learning" section in the main navigation on the left-hand side under "Rules”.  
 If you do not see it, go to File > Extensions and enable the Machine Learning Extension. 
     + If it does not appear in the list of extensions, then ensure that the extracted DLLs are unblocked by viewing their properties pages.
  
