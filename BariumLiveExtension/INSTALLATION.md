@@ -15,7 +15,7 @@
 5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
     + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config) if not already there
 	```xml
-	<add key="inrule:authoring:tenantManagementApiUrl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
+	<add key="inrule:authoring:tenantmanagementapiurl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
 	```
 6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Barium" tab in the main ribbon  
 If you do not see it, go to File > Extensions and enable the Barium Live Extension. 
