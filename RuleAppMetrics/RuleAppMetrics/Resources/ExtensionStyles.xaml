@@ -1,0 +1,56 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:InRuleLabs.AuthoringExtensions.RuleAppMetrics.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <!-- <ResourceDictionary Source="pack://application:,,,/InRule.Authoring;component/Resources/Shared.Wpf.xaml"/> -->
+        <ResourceDictionary Source="pack://application:,,,/InRuleLabs.AuthoringExtensions.RuleAppMetrics;component/Resources/InRuleShared.xaml"/>
+        
+        <ResourceDictionary>
+            
+
+            <Style x:Key="LinkButton" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock TextDecorations="Underline">
+                                <ContentPresenter />
+                            </TextBlock>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="Blue" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                        <Setter Property="Foreground" Value="Red" />
+                        <Setter Property="Cursor" Value="Hand"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="Gray" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"></BooleanToVisibilityConverter>
+            <controls:BooleanToHiddenConverter x:Key="booleanToHiddenConverter"></controls:BooleanToHiddenConverter>
+            <controls:DoubleToGridLengthConverter x:Key="doubleToGridLengthConverter"></controls:DoubleToGridLengthConverter>
+            
+            <Style x:Key="ContentHeader" TargetType="TextBlock">
+                <Setter Property="Background" Value="Azure" />
+                </Style>
+            
+            <Style TargetType="{x:Type Border}" x:Key="editBorder" >
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsEditing}" Value="true">
+                        <Setter Property="BorderThickness" Value="2" />
+                        <Setter Property="BorderBrush" Value="#0177CE" />
+                        <Setter Property="Margin" Value="3" />
+                        
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsEditing}" Value="false">
+                        <Setter Property="BorderThickness" Value="0" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>        
