@@ -1,5 +1,5 @@
 ## Installation
-1. To install the Barium Live extension, download the installation package from [here](https://github.com/InRule/irAuthor-Extensions/releases/download/BariumLiveExtension_v1.0.0/BariumLiveExtension.zip) to the PC where irAuthor is installed. 
+1. To install the Barium Live extension, download the installation package from [here](https://github.com/InRule/irAuthor-Extensions/releases) to the PC where irAuthor is installed. 
 2. Once downloaded, right-click on the ZIP file and select Properties. At the bottom of the Properties popup, check the box to Unblock, click Apply, and close the Properties popup. Then extract the zip archive into a folder.
 3. Ensure there are no instances of irAuthor currently open.
 4. Run one of the following batch files, as appropriate, to install the extension.
@@ -15,7 +15,7 @@
 5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
     + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config) if not already there
 	```xml
-	<add key="inrule:authoring:tenantManagementApiUrl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
+	<add key="inrule:authoring:tenantmanagementapiurl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
 	```
 6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Barium" tab in the main ribbon  
 If you do not see it, go to File > Extensions and enable the Barium Live Extension. 

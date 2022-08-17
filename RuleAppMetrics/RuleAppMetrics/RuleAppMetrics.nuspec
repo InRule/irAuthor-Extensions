@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://roadget.azurewebsites.net/eula.txt</licenseUrl>
+    <projectUrl>http://www.inrule.com/</projectUrl>
+    <iconUrl>http://roadget.azurewebsites.net/inrule32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>v0.0.1</releaseNotes>
+    <copyright>Copyright 2019 InRule Technology</copyright>
+    <tags>irauthor extension fields ROAD</tags>
+  </metadata>
+</package>

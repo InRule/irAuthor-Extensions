@@ -1,0 +1,118 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:converters="clr-namespace:InRule.Authoring.Converters;assembly=InRule.Authoring">
+
+   <!-- InRule Styles -->
+    <Style x:Key="IrLine" TargetType="Rectangle">
+        <Setter Property="Fill" Value="#D1E2FC" />
+    </Style>
+
+    <system:Int32 x:Key="EditorColumn1Width">150</system:Int32>
+    <system:Int32 x:Key="EditorColumn2Width">200</system:Int32>
+    <system:String x:Key="EditorColumn3Width">*</system:String>
+    <system:Int32 x:Key="EditorRow1Height">40</system:Int32>
+    <system:Int32 x:Key="EditorRowHeight">27</system:Int32>
+    <system:Int32 x:Key="EditorRadioButtonRowHeight">23</system:Int32>
+    <converters:GridLengthConverter x:Key="gridLengthConverter" />
+    <Style x:Key="IrBorder" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#D1E2FC" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    
+    <Style x:Key="IrVerticalLine" TargetType="Rectangle" BasedOn="{StaticResource IrLine}">
+        <Setter Property="Width" Value="1" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="IrHorizontalLine" TargetType="Rectangle" BasedOn="{StaticResource IrLine}">
+        <Setter Property="Height" Value="1" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- IrListBox is in platform-specific resource files -->
+
+ 
+  
+    <Style x:Key="IrTextBlock" TargetType="TextBlock" />
+
+    <Style x:Key="IrLabel" TargetType="TextBlock" BasedOn="{StaticResource IrTextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="IrImage32" TargetType="Image">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="32" />
+    </Style>
+
+    <Style x:Key="IrImage16" TargetType="Image">
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Width" Value="16" />
+    </Style>
+
+
+    <Style x:Key="IrTextBox" TargetType="TextBox">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Height" Value="23" />
+    </Style>
+    <Style x:Key="IrMultiLineTextBox" BasedOn="{StaticResource IrTextBox}" TargetType="TextBox">
+        <!-- Windows 8 requires setting height and vertical content alignment on textbox. We
+             need to revert them back to their defaults here: -->
+        <Setter Property="Height" Value="NaN" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+
+        <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        <Setter Property="Margin" Value="0,2,0,3" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+
+    <Style x:Key="IrButton" TargetType="Button">
+        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Height" Value="23" />
+        <Setter Property="MinWidth" Value="75" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+
+    <Style x:Key="IrSquareButton" TargetType="Button">
+        <Setter Property="Width" Value="22" />
+        <Setter Property="Height" Value="22" />
+    </Style>
+
+    <Style x:Key="IrGridCellBrowseButton" TargetType="Button">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="Content" Value="..." />
+    </Style>
+
+    <Style x:Key="IrImage" TargetType="Image" />
+
+
+
+    <Style x:Key="IrRadioButton" TargetType="RadioButton">
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="IrPasswordBox" TargetType="PasswordBox">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Height" Value="23" />
+    </Style>
+
+    <Style x:Key="TaskDialogMainInstruction" TargetType="TextBlock" BasedOn="{StaticResource IrTextBlock}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="#FF003399" />
+        <Setter Property="Margin" Value="0,0,20,0" />
+    </Style>
+
+    <Style x:Key="IrCheckBox" TargetType="CheckBox">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+
+
+    <Style x:Key="IrComboBox" TargetType="ComboBox">
+        <Setter Property="Height" Value="23" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+</ResourceDictionary>

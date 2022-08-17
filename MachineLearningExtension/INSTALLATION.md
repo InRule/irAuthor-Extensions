@@ -24,7 +24,7 @@
 		<bindingRedirect oldVersion="1.0.0.0-5.7.2.240" newVersion="5.7.2.240" />
 	</dependentAssembly>
 	```
-6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Machine Learning" section in the main navigation on the left-hand side under "Rules”.  
+6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Machine Learning" section in the main navigation on the left-hand side under "Rules".
 If you do not see it, go to File > Extensions and enable the Machine Learning Extension. 
     + If it does not appear in the list of extensions, then ensure that the extracted DLLs are unblocked by viewing their properties pages.
  
