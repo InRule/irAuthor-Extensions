@@ -1,10 +1,8 @@
 # irAuthor Extensions
-A collection of irAuthor extensions. Most are "user" extensions (as opposed to "system" extensions) and thus must be enabled before they can be used for the first time. You can find the Extensions dialog off of the File menu.
-
-All extension projects reference the InRule SDK in `%programfiles%\InRule`, so it should simply be a matter of downloading and compiling.
+irAuthor provides a framework for writing extensions to add additional functionality to irAuthor. This repository contains a variety of extensions authored by InRule that you can download and install. Managed extensions can be installed from the downloads here, but they are also now installable directly in irAuthor via the Extension Manager.
 
 ## Managed
-These extensions are available as compiled assemblies with all installation media included in the release.
+These extensions are available as compiled assemblies with all installation media included in the release. These are officially supported by InRule and can also be installed via the Extension Manager in irAuthor.
 
 |Extension|Description|
 |---|---|
@@ -14,7 +12,7 @@ These extensions are available as compiled assemblies with all installation medi
 |[Barium Live Extension](BariumLiveExtension)|Execute processes from Barium Live within your Rule Application
 
 ## Unmanaged
-These extensions are not officially supported by InRule Technology, but the source code is available for you to build or use as an example for an extension being built in-house.
+These extensions are not officially supported by InRule Technology, but the source code is available for you to build or use as an example for an extension being built in-house. All extension projects reference the InRule SDK in `%programfiles%\InRule`, so it should simply be a matter of downloading and compiling.
 
 |Extension|Description|
 |---|---|
