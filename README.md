@@ -9,7 +9,7 @@ These extensions are available as compiled assemblies with all installation medi
 |[MergeExtension](MergeExtension)|Identify and review the differences between two different Rule Applications, and then merge selected changes together
 |[MachineLearningExtension](MachineLearningExtension)|Execute Machine Learning models from xAI Workbench within your Rule Application
 |[DMN Modeler Extension](https://github.com/InRule/DMNModeler)|Model decisions using Decision Model and Notation 1.3 in conjunction with irAuthor
-|[Barium Live Extension](BariumLiveExtension)|Execute processes from Barium Live within your Rule Application
+|[Barium Live Extension](BariumLiveExtension)|Execute processes and map process data models within your Rule Application
 
 ## Unmanaged
 These extensions are not officially supported by InRule Technology, but the source code is available for you to build or use as an example for an extension being built in-house. All extension projects reference the InRule SDK in `%programfiles%\InRule`, so it should simply be a matter of downloading and compiling.
