@@ -12,12 +12,7 @@
         - This can be helpful for shared authoring VM environments, so users do not unintentionally receive the extension.
         - Note that the user won’t be able to launch versions of irAuthor prior to 5.7.3 after running this batch, due to those versions being unable to load the extension.
         - Copies the extension files into "%localappdata%\InRule\irAuthor\ExtensionExchange\Process Automation Extension"
-5. Update the irAuthor configuration file (irAuthor.exe.config)located in C:\Program Files (x86)\InRule\irAuthor as needed
-    + Add the following line in the `<appSettings>` section of the irAuthor configuration file (irAuthor.exe.config) if not already there
-	```xml
-	<add key="inrule:authoring:tenantmanagementapiurl" value="https://ir-tenantmgmt-prod-ncus-wa.azurewebsites.net" />
-	```
-6. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Process Automation" tab in the main ribbon  
+5. When you launch irAuthor, open a Rule Application (or create a new one), and you should see a new "Process Automation" tab in the main ribbon  
 If you do not see it, go to File > Extensions and enable the Process Automation Extension. 
     + If it does not appear in the list of extensions, then ensure that the extracted DLLs are unblocked by viewing their properties pages.
  
