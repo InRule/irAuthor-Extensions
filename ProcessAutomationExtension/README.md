@@ -18,7 +18,7 @@ Installation instructions are located [here](INSTALLATION.md)
 Note that these installation instructions are only for existing InRule customers. Trial users will already have the extension installed if irAuthor was installed via the trial portal link
 
 ## Documentation and Samples:
-Complete documentation for usage of the Barium Live integration is available on the InRule Support site. Links to important articles are included below
+Complete documentation for usage of the Process Automation integration is available on the InRule Support site. Links to important articles are included below
 
 
 ### [Introduction](https://support.inrule.com/hc/en-us/articles/6311709475213-Introduction)
