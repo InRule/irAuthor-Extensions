@@ -1,7 +1,7 @@
 # Introduction
 Decisions created within InRule may require multiple logical steps over the course of their execution.  The Decision Flow extension allows Rule Authors to create a process flow for a Decision in a visual editor, which is then used to generate the required logical and rule set structures to facilitate the rule authoring process.
  
-## What is the support model for the Process Automation Extension?
+## What is the support model for the Decision Flow Extension?
 The Decision Flow extension is released as a managed extension.  This means that InRule’s support team fully supports it.  Any questions or issues may be submitted to [support@inrule.com](support@inrule.com).
 
 ## Licensing
