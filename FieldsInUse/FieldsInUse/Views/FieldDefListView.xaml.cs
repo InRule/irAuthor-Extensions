@@ -12,6 +12,8 @@ using System.Windows.Media;
 using InRule.Authoring.Extensions;
 using InRule.Repository;
 using InRuleLabs.AuthoringExtensions.FieldsInUse.Extensions;
+using System.Xml.Linq;
+using InRule.Repository.Infos;
 
 namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
 {
@@ -20,8 +22,6 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
     /// </summary>
     public partial class FieldDefListView : UserControl, IDisposable
     {
-        public event EventHandler<object> OnCloseView;
-        
         [Flags]
         public enum Options
         {
@@ -30,23 +30,23 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             TypeNameColumn = 32,
         }
 
-        public void SetTitleBarText(string title)
-        {
-            this.TitleBar.Content = title;
-        }
-        private bool TryGetUnusedFieldList(out IList<UnusedFieldReference> unusedFields, out string errorMsg)
-        {
-            unusedFields = this.TargetRuleApplicationDef.GetUnusedFields()
-                .Select(t => new UnusedFieldReference(t)).ToList();
-            errorMsg = null;
-            return true;
-        }
-
+        public event EventHandler<object> OnCloseView;
         public RuleApplicationDef TargetRuleApplicationDef { get; set; }
+        public ListViewSortManager ListViewSortManager { get; private set; }
         public string DefaultSortColumnName { get; set; }
-        public FieldDefListView(RuleApplicationDef ruleAppDef, Options includedOptions, List<UnusedFieldAction> actions, string defaultSortColumnName)
+        private List<UnusedFieldAction> _actions;
+        private Action<FieldDefListView, IEnumerable<UnusedFieldReference>> _deleteAllAction;
+        private bool _hasLoaded;
+
+        public FieldDefListView(RuleApplicationDef ruleAppDef, 
+                                Options includedOptions, 
+                                List<UnusedFieldAction> actions, 
+                                Action<FieldDefListView, IEnumerable<UnusedFieldReference>> deleteAllAction, 
+                                string defaultSortColumnName)
         {
             this.Background = Brushes.White;
+            _actions = actions;
+            _deleteAllAction = deleteAllAction;
             TargetRuleApplicationDef = ruleAppDef;
             DefaultSortColumnName = defaultSortColumnName;
         
@@ -56,19 +56,13 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             InitializeComponent();
 
             DataTemplate cardLayout = new DataTemplate();
-            //cardLayout.DataType = typeof(CreditCardPayment);
-
-            //set up the stack panel
-            
             
             if (includedOptions.HasFlag(Options.NameColumn)) { AddColumn("NameColumn");}
             if (includedOptions.HasFlag(Options.TypeNameColumn)) { AddColumn("TypeNameColumn"); }
 
-            
             actions = new List<UnusedFieldAction>(actions);
             
             FrameworkElementFactory spFactory = new FrameworkElementFactory(typeof(StackPanel));
-            //spFactory.Name = "myComboFactory";
             spFactory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
 
             int count = 0;
@@ -92,12 +86,10 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
                 spFactory.AppendChild(buttonFactory);
             }
             
-            
             //set the visual tree of the data template
             cardLayout.VisualTree = spFactory;
 
             var actionColumn = AddColumn("ActionColumn");
-            //set the item template to be our shiny new data template
             actionColumn.CellTemplate = cardLayout;
             
             ListViewSortManager = new ListViewSortManager(this.lstViewValues);
@@ -107,7 +99,12 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             HideHistoryBorder();
 
             this.OnCloseView += OnClosingView;
+        }
 
+        #region Helpers
+        public void SetTitleBarText(string title)
+        {
+            this.TitleBar.Content = title;
         }
 
         private GridViewColumn AddColumn(string resourceName)
@@ -121,31 +118,96 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
         {
             return this.Resources[resourceName] as GridViewColumn;
         }
-        
-        private void OnClosingView(object sender, object e)
+
+        private void HideHistoryBorder()
         {
-            
+            Dispatcher.Invoke(() =>
+            {
+                OuterHistoryBorder.Visibility = Visibility.Hidden;
+            });
         }
 
+        private static ListSortDirection GetColumnDefaultSortDirection(string columnName)
+        {
+            switch (columnName)
+            {
+                case "LastModifiedDate":
+                    {
+                        return ListSortDirection.Descending;
+                    }
+            }
+            return ListSortDirection.Ascending;
+        }
+        #endregion
 
-        public ListViewSortManager ListViewSortManager { get; private set; }
-
+        #region Basic Event Handlers
         private void FieldDefListView_Initialized(object sender, EventArgs e)
         {
             _hasLoaded = true;
             RefreshRuleAppListAsync();
         }
 
-      
+        private void RefreshRuleApplicationList_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshRuleAppListAsync();
+        }
 
-        private bool _hasLoaded;
+        private void CheckApplyDefaultSorting()
+        {
+            if (!ListViewSortManager.HasSortApplied)
+            {
+                ListViewSortManager.SortByColumnNameAscending(DefaultSortColumnName);
+            }
+        }
 
+        private void HideErrorMessage()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                ErrorMessageBorder.Visibility = Visibility.Hidden;
+            });
+        }
+
+        private void txtFilter_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+            }
+        }
+
+        private void TxtFilter_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(lstViewValues.ItemsSource);
+            view.Refresh();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                OnCloseView?.Invoke(this, null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void Dispose()
+        {
+            //RuleAppDBService.OnDatabaseUpdated -= OnDatabaseUpdated;
+        }
+
+        private void OnClosingView(object sender, object e)
+        {
+        }
+        #endregion
+
+        #region Unused Field Loading Logic
         private void RefreshRuleAppListAsync()
         {
-
             if (!_hasLoaded) return;
-
-           
 
             try
             {
@@ -158,7 +220,6 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
                 MessageBox.Show(ex.Message);
                 waitSpinner.StopSpinning();
             }
-
         }
         public void LoadAllRuleApps()
         {
@@ -170,27 +231,36 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             }
             else
             {
-                Dispatcher.Invoke(() => { OnUnusedFieldsRetrieved(unusedFieldList); }
-                );
+                Dispatcher.Invoke(() => { OnUnusedFieldsRetrieved(unusedFieldList); });
             }
         }
-       
-        private void HideErrorMessage()
+
+        private bool TryGetUnusedFieldList(out IList<UnusedFieldReference> unusedFields, out string errorMsg)
         {
-            Dispatcher.Invoke(() =>
+            unusedFields = this.TargetRuleApplicationDef
+                               .GetUnusedFields()
+                               .Select(t => new UnusedFieldReference(t))
+                               .ToList();
+
+            var usageNetwork = DefUsageNetwork.Create(this.TargetRuleApplicationDef);
+            var allEntities = this.TargetRuleApplicationDef.GetChildDefsByType<EntityDef>();
+            foreach (var entity in allEntities)
             {
-                ErrorMessageBorder.Visibility = Visibility.Hidden;
-            });
+                var thisUsages = usageNetwork.GetDefUsages(entity.Guid);
+                if (!thisUsages.Any(usage => usage.UsageType == DefUsageType.ConsumedBy
+                                            || usage.UsageType == DefUsageType.InvalidatedBy
+                                            || usage.UsageType == DefUsageType.UpdatedBy
+                                            || usage.UsageType == DefUsageType.TypeUsedBy
+                                            || usage.UsageType == DefUsageType.ParentOf  //This forces all children to be removed before this can be considered unused.  Alternative would be to auto-select children
+                                            )
+                    && entity.Fields.Count == 0)
+                {
+                    unusedFields.Add(new UnusedFieldReference(entity));
+                }
+            }
 
-        }
-
-        private void HideHistoryBorder()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                OuterHistoryBorder.Visibility = Visibility.Hidden;
-            });
-
+            errorMsg = null;
+            return true;
         }
 
         private void OnUnusedFieldsRetrieved(IList<UnusedFieldReference> ruleAppDescriptors)
@@ -211,6 +281,20 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             }
         }
 
+        private bool TestRuleAppAgainstFilter(object item)
+        {
+            var dbRuleApp = item as UnusedFieldReference;
+
+            if (dbRuleApp == null) return false;
+
+            var filter = this.txtFilter.Text;
+            if (string.IsNullOrEmpty(filter)) return true;
+            if (dbRuleApp.Name.ContainsIgnoreCase(filter)) return true;
+            if (dbRuleApp.TypeName.ContainsIgnoreCase(filter)) return true;
+            return false;
+        }
+        #endregion
+
         private void OnError(string errorMsg)
         {
             Dispatcher.Invoke(() =>
@@ -224,84 +308,33 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             });
         }
 
-        private void CheckApplyDefaultSorting()
-        {
-            if (!ListViewSortManager.HasSortApplied)
-            {
-                ListViewSortManager.SortByColumnNameAscending(DefaultSortColumnName);
-            }
-        }
-
-        private void RefreshRuleApplicationList_Click(object sender, RoutedEventArgs e)
-        {
-            RefreshRuleAppListAsync();
-        }
-
-        
-        private bool TestRuleAppAgainstFilter(object item)
-        {
-            var dbRuleApp = item as UnusedFieldReference;
-
-            if (dbRuleApp == null) return false;
-
-            var filter = this.txtFilter.Text;
-            if (string.IsNullOrEmpty(filter)) return true;
-            if (dbRuleApp.Name.ContainsIgnoreCase(filter)) return true;
-            if (dbRuleApp.TypeName.ContainsIgnoreCase(filter)) return true;
-            return false;
-        }
-
-
-        private void txtFilter_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-              
-            }
-        }
-
-        private void TxtFilter_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var view = CollectionViewSource.GetDefaultView(lstViewValues.ItemsSource);
-            view.Refresh();
-        }
-
-        private static ListSortDirection GetColumnDefaultSortDirection(string columnName)
-        {
-            switch (columnName)
-            {
-                case "LastModifiedDate":
-                {
-                    return ListSortDirection.Descending;
-                }
-            }
-            return ListSortDirection.Ascending;
-        }
-
-      
-        private void Close_Click(object sender, RoutedEventArgs e)
+        private void DeleteAll_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-
-                OnCloseView?.Invoke(this, null);
+                waitSpinner.StartSpinning();
+                var allItems = this.lstViewValues.ItemsSource.ToList<UnusedFieldReference>();
+                _deleteAllAction(this, allItems);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-      
-        
-        public void Dispose()
-        {
-            //RuleAppDBService.OnDatabaseUpdated -= OnDatabaseUpdated;
+            RefreshRuleAppListAsync();
+            waitSpinner.StopSpinning();
         }
 
         public void RemoveItem(UnusedFieldReference target)
         {
             var source = lstViewValues.ItemsSource as ObservableCollection<UnusedFieldReference>;
             source.Remove(target);
+        }
+        public void RemoveRange(IEnumerable<UnusedFieldReference> target)
+        {
+            var source = lstViewValues.ItemsSource as ObservableCollection<UnusedFieldReference>;
+            var sourceList = source.ToList();
+            sourceList.RemoveAll(s => target.Contains(s));
+            lstViewValues.ItemsSource = new ObservableCollection<UnusedFieldReference>(sourceList);
         }
     }
 
@@ -321,8 +354,8 @@ namespace InRuleLabs.AuthoringExtensions.FieldsInUse.Views
             try
             {
                 var button = sender as Button;
-                var ruleApp = button.DataContext as UnusedFieldReference;
-                Action(ListView, ruleApp);
+                var unusedRef = button.DataContext as UnusedFieldReference;
+                Action(ListView, unusedRef);
             }
             catch (Exception ex)
             {
