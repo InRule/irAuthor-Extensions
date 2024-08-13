@@ -10,7 +10,7 @@ These extensions are available as compiled assemblies with all installation medi
 |[MachineLearningExtension](MachineLearningExtension)|Execute Machine Learning models from xAI Workbench within your Rule Application
 |[DMN Modeler Extension](https://github.com/InRule/DMNModeler)|Model decisions using Decision Model and Notation 1.3 in conjunction with irAuthor
 |[Process Automation Extension](ProcessAutomationExtension)|Execute processes and map process data models within your Rule Application
-|[irX for Microsoft Dynamics 365](irXForDynamics365)|Author and apply rules against Microsoft Dynamics CRM entities
+|[irX for Microsoft Dynamics 365](irXForDynamics365)|Author and apply rules against Microsoft Dynamics 365 entities
 |[irX for Salesforce](irXForSalesforce)|Author and apply rules against Salesforce entities
 
 ## Unmanaged
