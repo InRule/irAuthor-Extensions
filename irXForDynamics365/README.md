@@ -1,7 +1,7 @@
 # irX for Dynamics 365
 
 ### Features
-Allow you to author rules against Dynamics 365 entities and become familiar with the types of rules-driven processes that can be implemented. After testing locally from your desktop using irVerify, the rules will be ready for execution from Dynamics 365.
+This irAuthor extension will allow you to author rules against Dynamics 365 entities and become familiar with the types of rules-driven processes that can be implemented. After testing locally from your desktop using irVerify, the rules will be ready for execution from Dynamics 365.
 
 ### Requirements
 - IrAuthor version 5.8.1 or newer
