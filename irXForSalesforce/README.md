@@ -1,7 +1,7 @@
 # irX for Salesforce
 
 ### Features
-This irAuthor extension will allow you to author rules against Salesforce entities and become familiar with the types of rules-driven processes that can be
+This irAuthor extension will allow you to author complex business rules against Salesforce entities and become familiar with the types of rules-driven processes that can be
 implemented. After testing locally from your desktop using irVerify, the rules will be ready for execution from Salesforce.
 
 ### Requirements
