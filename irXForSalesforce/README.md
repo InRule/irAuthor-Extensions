@@ -8,4 +8,4 @@ implemented. After testing locally from your desktop using irVerify, the rules w
 - IrAuthor version 5.8.1 or newer
 
 ## Usage
-Please view our [InRule for Salesforce Deployment Guide](https://inruleintegrations.blob.core.windows.net/docs/InRule%20for%20Salesforce%20Deployment%20Guide.pdf) to learn more about this extension
+Please view our [InRule for Salesforce Documentation](https://support.inrule.com/hc/en-us/articles/18376801734541-InRule-for-Salesforce) to learn more about this extension and the Salesforce integration framework

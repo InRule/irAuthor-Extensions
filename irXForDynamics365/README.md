@@ -7,4 +7,4 @@ This irAuthor extension will allow you to author complex business rules against 
 - IrAuthor version 5.8.1 or newer
 
 ## Usage
-Please view our [InRule for Microsoft Dynamics 365 Deployment Guide](https://inruledynamicsappsource.blob.core.windows.net/documents/InRule%20for%20Microsoft%20Dynamics%20365%20Deployment%20Guide.pdf) to learn more about this extension
+Please view our [InRule for Microsoft Dynamics 365 Documentation](https://support.inrule.com/hc/en-us/articles/18376430935949-InRule-for-Microsoft-Dynamics-365-Power-Platform) to learn more about this extension and the Dynamics integration framework.
