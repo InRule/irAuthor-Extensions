@@ -4,9 +4,9 @@ irAuthor provides a framework for writing extensions to add additional functiona
 ## Managed
 These extensions are available as compiled assemblies with all installation media included in the release. These are officially supported by InRule and can also be installed via the Extension Manager in irAuthor.
 
-|Extension|Description|
+|Extension&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Description|
 |---|---|
-|[irX for Microsoft Dynamics 365](irXForDynamics365)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Author and test complex business rules directly against Dynamics 365
+|[irX for Microsoft Dynamics 365](irXForDynamics365)|Author and test complex business rules directly against Dynamics 365
 |[irX for Salesforce](irXForSalesforce)|Author and test complex business rules directly against Salesforce
 |[Merge Extension](MergeExtension)|Identify and review the differences between two different Rule Applications, and then merge selected changes together
 |[Machine Learning Extension](MachineLearningExtension)|Execute Machine Learning models from xAI Workbench within your Rule Application
