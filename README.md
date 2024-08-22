@@ -8,6 +8,7 @@ These extensions are available as compiled assemblies with all installation medi
 |---|---|
 |[irX for Microsoft Dynamics 365](irXForDynamics365)|Author and test complex business rules directly against Dynamics 365
 |[irX for Salesforce](irXForSalesforce)|Author and test complex business rules directly against Salesforce
+|[irX for JavaScript](irXForJavaScript)|Author and package rule applications that can be executed natively using JavaScript
 |[Merge Extension](MergeExtension)|Identify and review the differences between two different Rule Applications, and then merge selected changes together
 |[Machine Learning Extension](MachineLearningExtension)|Execute Machine Learning models from xAI Workbench within your Rule Application
 |[DMN Modeler Extension](https://github.com/InRule/DMNModeler)|Model decisions using Decision Model and Notation 1.3 in conjunction with irAuthor
